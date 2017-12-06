@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# copied from create-react-native-app .gitignore
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
