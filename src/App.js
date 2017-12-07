@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, View, Alert } from 'react-native';
 import Rainbow from './components/Rainbow/Rainbow';
+import AudioToPicture from './screens/AudioToPicture/AudioToPicture'
 
 export default class App extends Component {
   constructor() {
@@ -53,8 +54,9 @@ export default class App extends Component {
                  activeColor={this.state.activeColor} 
                  rainbowStatus={this.state.rainbowStatus} 
                  _toggleStripe={this._toggleStripe.bind(this)} />
-        <View style={{flex: 4, backgroundColor: 'powderblue'}} />
-        <View style={{flex: 5, backgroundColor: 'red'}} />
+        <View style={{flex: 9, backgroundColor: 'powderblue'}}>
+          {this.state.activeColor == 'red' && <AudioToPicture/>}
+        </View>
       </View>
     );
   }
