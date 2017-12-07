@@ -1,57 +1,54 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { AppRegistry, View, Alert } from 'react-native';
+import Rainbow from './components/Rainbow/Rainbow';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class App extends Component {
+  constructor() {
+    super();
+    const orangeThroughPurple = {active: false, enabled: true}
+    this.state = {
+      activeMode: 'red',
+      rainbowStatus: {
+        red: {
+          active: true,
+          enabled: true
+        },
+        orange: orangeThroughPurple,
+        yellow: orangeThroughPurple,
+        green: orangeThroughPurple,
+        blue: orangeThroughPurple,
+        purple: orangeThroughPurple
+      }
+    };
+  }
 
-export default class App extends Component<{}> {
+  // _toggleStripe = (color) => {
+  //   const NewRainbowStatus = update(this.state.rainbowStatus, {
+  //     red: {$toggle: ['enabled']}
+  //   })
+  //   this.setState({
+  //     rainbowStatus: NewRainbowStatus
+  //   })
+  // }
+
+  // _nextMode() {
+  //   const rainbow = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+  //   this.setState
+  // }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+      <View style={[{flex:1}]}>
+        <Rainbow style={{flex: 1}} 
+                 rainbowStatus={this.state.rainbowStatus} 
+                 _toggleStripe={this._toggleStripe} />
+        <View style={{flex: 4, backgroundColor: 'powderblue'}} />
+        <View style={{flex: 5, backgroundColor: 'red'}} />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+
+
+AppRegistry.registerComponent('YouNiVerse', () => App);
