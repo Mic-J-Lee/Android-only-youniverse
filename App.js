@@ -21,19 +21,30 @@ export default class App extends Component {
   _toggleStripe(color) {
     let rainbowStatusClone = {...this.state.rainbowStatus}
     rainbowStatusClone[color] = !rainbowStatusClone[color]
-    this.setState({rainbowStatus: rainbowStatusClone})
+    if (!Object.values(rainbowStatusClone).includes(true))
+      Alert.alert('You must have at least 1 active color!')
+    else if (color == this.state.activeColor) {
+      this._nextMode()
+      this.setState({rainbowStatus: rainbowStatusClone})
+    } else
+      this.setState({rainbowStatus: rainbowStatusClone})
   }
 
-  // _updateGuessedLetters(letter) {
-  //   let guessedLettersClone = [...this.state.guessedLetters]
-  //   guessedLettersClone.push(letter)
-  //   this.setState({guessedLetters: guessedLettersClone})
-  // }
-
-  // _nextMode() {
-  //   const rainbow = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
-  //   this.setState
-  // }
+  _nextMode() {
+    const modes = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+    currentMode = modes.indexOf(this.state.activeColor)
+    currentMode == 5 ? nextMode = 0 : nextMode = currentMode + 1
+    nextModeIsFound = false
+    while (nextModeIsFound == false) {
+      if (this.state.rainbowStatus[modes[nextMode]] == true) 
+        nextModeIsFound = true 
+      else if (nextMode == 5)
+        nextMode = 0
+      else
+        nextMode++
+    }
+    this.setState({activeColor: modes[nextMode]})
+  }
 
   render() {
     return (
