@@ -5,30 +5,29 @@ import Rainbow from './components/Rainbow/Rainbow';
 export default class App extends Component {
   constructor() {
     super();
-    const orangeThroughPurple = {active: false, enabled: true}
     this.state = {
-      activeMode: 'red',
+      activeColor: 'red',
       rainbowStatus: {
-        red: {
-          active: true,
-          enabled: true
-        },
-        orange: orangeThroughPurple,
-        yellow: orangeThroughPurple,
-        green: orangeThroughPurple,
-        blue: orangeThroughPurple,
-        purple: orangeThroughPurple
+        red: true,
+        orange: true,
+        yellow: true,
+        green: true,
+        blue: true,
+        purple: true
       }
     };
   }
 
-  // _toggleStripe = (color) => {
-  //   const NewRainbowStatus = update(this.state.rainbowStatus, {
-  //     red: {$toggle: ['enabled']}
-  //   })
-  //   this.setState({
-  //     rainbowStatus: NewRainbowStatus
-  //   })
+  _toggleStripe(color) {
+    let rainbowStatusClone = {...this.state.rainbowStatus}
+    rainbowStatusClone[color] = !rainbowStatusClone[color]
+    this.setState({rainbowStatus: rainbowStatusClone})
+  }
+
+  // _updateGuessedLetters(letter) {
+  //   let guessedLettersClone = [...this.state.guessedLetters]
+  //   guessedLettersClone.push(letter)
+  //   this.setState({guessedLetters: guessedLettersClone})
   // }
 
   // _nextMode() {
@@ -39,9 +38,10 @@ export default class App extends Component {
   render() {
     return (
       <View style={[{flex:1}]}>
-        <Rainbow style={{flex: 1}} 
+        <Rainbow style={{flex: 1}}
+                 activeColor={this.state.activeColor} 
                  rainbowStatus={this.state.rainbowStatus} 
-                 _toggleStripe={this._toggleStripe} />
+                 _toggleStripe={this._toggleStripe.bind(this)} />
         <View style={{flex: 4, backgroundColor: 'powderblue'}} />
         <View style={{flex: 5, backgroundColor: 'red'}} />
       </View>
