@@ -107,7 +107,7 @@ buck-out
 .gradle
 local.properties
 *.iml
-/android/
+# /android/       //commented out to include sound files
 
 # Node
 node_modules
