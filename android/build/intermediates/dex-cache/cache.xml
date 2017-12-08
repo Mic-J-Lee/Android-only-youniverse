@@ -39,6 +39,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/exploded-aar/YouNiVerse/react-native-sound/unspecified/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.1"
+        sha1="6eafc6eafcceacf06b33e8a28909a792d99f7f35">
+        <dex dex="/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/pre-dexed/debug/YouNiVerse-react-native-sound-unspecified_76b0abaadb53cf323c01477be53bb59506d6e076.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/michaellee/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.6.0/69edde9fc4b01c9fd51d25b83428837478c27254/okhttp-3.6.0.jar"
         jumboMode="false"
         optimize="true"

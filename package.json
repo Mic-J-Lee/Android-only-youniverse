@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "16.0.0",
     "react-native": "0.51.0",
+    "react-native-sound": "git+https://github.com/zmxv/react-native-sound#f28be771cc728366ddb14f07bbe863fd40879cac",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },

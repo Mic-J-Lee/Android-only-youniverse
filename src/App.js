@@ -8,7 +8,7 @@ export default class App extends Component {
     super();
     this.state = {
       activeColor: 'red',
-      rainbowStatus: {
+      rainbow: {
         red: true,
         orange: true,
         yellow: true,
@@ -20,31 +20,31 @@ export default class App extends Component {
   }
 
   _toggleStripe(color) {
-    let rainbowStatusClone = {...this.state.rainbowStatus}
-    rainbowStatusClone[color] = !rainbowStatusClone[color]
-    if (!Object.values(rainbowStatusClone).includes(true))
+    let rainbowClone = {...this.state.rainbow}
+    rainbowClone[color] = !rainbowClone[color]
+    if (!Object.values(rainbowClone).includes(true))
       Alert.alert('You must have at least 1 active color!')
     else if (color == this.state.activeColor) {
-      this._nextMode()
-      this.setState({rainbowStatus: rainbowStatusClone})
+      this._nextColor()
+      this.setState({rainbow: rainbowClone})
     } else
-      this.setState({rainbowStatus: rainbowStatusClone})
+      this.setState({rainbow: rainbowClone})
   }
 
-  _nextMode() {
-    const modes = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
-    currentMode = modes.indexOf(this.state.activeColor)
-    currentMode == 5 ? nextMode = 0 : nextMode = currentMode + 1
-    nextModeIsFound = false
-    while (nextModeIsFound == false) {
-      if (this.state.rainbowStatus[modes[nextMode]] == true) 
-        nextModeIsFound = true 
-      else if (nextMode == 5)
-        nextMode = 0
+  _nextColor() {
+    const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+    currentColor = colors.indexOf(this.state.activeColor)
+    currentColor == 5 ? nextColor = 0 : nextColor = currentColor + 1
+    nextColorIsFound = false
+    while (nextColorIsFound == false) {
+      if (this.state.rainbow[colors[nextColor]] == true) 
+        nextColorIsFound = true 
+      else if (nextColor == 5)
+        nextColor = 0
       else
-        nextMode++
+        nextColor++
     }
-    this.setState({activeColor: modes[nextMode]})
+    this.setState({activeColor: colors[nextColor]})
   }
 
   render() {
@@ -52,7 +52,7 @@ export default class App extends Component {
       <View style={[{flex:1}]}>
         <Rainbow style={{flex: 1}}
                  activeColor={this.state.activeColor} 
-                 rainbowStatus={this.state.rainbowStatus} 
+                 rainbow={this.state.rainbow} 
                  _toggleStripe={this._toggleStripe.bind(this)} />
         <View style={{flex: 9, backgroundColor: 'powderblue'}}>
           {this.state.activeColor == 'red' && <AudioToPicture/>}
