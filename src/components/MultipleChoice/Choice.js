@@ -22,7 +22,12 @@ export default class Choice extends Component {
         wrongGuess: true
       })
     }
-    
+  }
+
+  componentWillReceiveProps() {
+    this.setState({
+      wrongGuess: false
+    })
   }
 
   render() {

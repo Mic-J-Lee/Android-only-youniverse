@@ -10,6 +10,7 @@ export default class AudioButton extends Component {
   componentDidMount() {
     this.spin()
   }
+
   spin() {
     this.spinValue.setValue(0)
     Animated.timing(
@@ -37,7 +38,7 @@ export default class AudioButton extends Component {
   }
 
   render() {
-    const spin = this.spinValue.interpolate({
+    const spin = this.props.disabled ? '0deg' : this.spinValue.interpolate({
         inputRange: [0, 1],
         outputRange: ['360deg', '0deg']
       })
@@ -48,7 +49,7 @@ export default class AudioButton extends Component {
         onLongPress={this.props.size == 'small' ? this.props._checkIfCorrect : this._showPronunciation}
         style={styles[this.props.size]} >
         <Animated.Image 
-          style={[styles[this.props.size], {transform: [{rotate: spin}]} ]}
+          style={[styles[this.props.size], {transform: [{rotate: spin}]}, {opacity: this.props.disabled ? .5 : 1} ]}
           resizeMode='contain'
           source={require('../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png')} />
       </TouchableOpacity>
