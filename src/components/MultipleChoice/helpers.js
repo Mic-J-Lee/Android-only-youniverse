@@ -1,10 +1,10 @@
-import React from 'react';
-import { View } from 'react-native';
-import Sound from 'react-native-sound';
+import React from 'react'
+import { View } from 'react-native'
+import Sound from 'react-native-sound'
 
 export function _displayQuestion(element) {
   return(
-    <View style={{flex: 4, alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{flex: 4, alignItems: 'center'}}>
       {element}
     </View>
   )
@@ -26,6 +26,44 @@ export function _displayMultipleChoices(multipleChoicesArray) {
         </View>
       </View>
       <View style={{flex: 1, flexDirection:'row'}}>
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {shuffledArray[3]}
+        </View>
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {shuffledArray[4]}
+        </View>
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {shuffledArray[5]}
+        </View>
+      </View>
+    </View>
+  )
+}
+
+export function _displayLandscapeQuestion(element) {
+  return(
+    <View style={{flex: 4, justifyContent: 'center'}}>
+      {element}
+    </View>
+  )
+}
+
+export function _displayLandscapeMultipleChoices(multipleChoicesArray) {
+  shuffledArray = _shuffleThisArray(multipleChoicesArray)
+  return(
+    <View style={{flex: 5, flexDirection: 'row'}}>
+      <View style={{flex: 1}}>
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {shuffledArray[0]}
+        </View>
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {shuffledArray[1]}
+        </View>
+        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+          {shuffledArray[2]}
+        </View>
+      </View>
+      <View style={{flex: 1}}>
         <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
           {shuffledArray[3]}
         </View>

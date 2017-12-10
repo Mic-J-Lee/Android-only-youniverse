@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { AppRegistry, View, Alert } from 'react-native';
-import Rainbow from './components/Rainbow/Rainbow';
-import MultipleChoiceQuestion from './screens/MultipleChoiceQuestion'
+import React, { Component } from 'react'
+import { Alert, AppRegistry, Dimensions, View } from 'react-native'
+import Rainbow from './components/Rainbow/Rainbow'
+import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
 
 
 export default class App extends Component {
   constructor() {
-    super();
+    super()
+    let dim = Dimensions.get('screen')
     this.state = {
       activeColor: 'red',
       rainbow: {
@@ -17,19 +18,22 @@ export default class App extends Component {
         blue: true,
         purple: true
       },
-      cards: initialCards
-    };
+      cards: initialCards,
+      orientation: dim.height > dim.width ? 'portrait' : 'landscape'
+    }
+    Dimensions.addEventListener('change', () => {
+      dim = Dimensions.get('screen')
+      this.setState({
+          orientation: dim.height > dim.width ? 'portrait' : 'landscape'
+      })
+    })
   }
 
-  componentDidMount() {
+  drawSixCards = () => {
     //access database, obtain one correct card and five dummies
-    
-  }
-
-  drawSixCards() {
-    shuffleThisArray = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
+    shuffledCards = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
     this.setState({
-      cards: shuffleThisArray
+      cards: shuffledCards
     })
   }
 
@@ -58,31 +62,34 @@ export default class App extends Component {
       else
         nextColor++
     }
+    // record success result into database
     this.setState({activeColor: colors[nextColor]})
     this.drawSixCards()
   }
 
   render() {
     const rainbowElement = (<Rainbow 
-      style={{flex: 1}}
       activeColor={this.state.activeColor} 
       rainbow={this.state.rainbow} 
-      _toggleStripe={this._toggleStripe.bind(this)} />
+      _toggleStripe={this._toggleStripe.bind(this)} 
+      orientation={this.state.orientation} />
     )
     const multipleChoiceQuestion = (<MultipleChoiceQuestion
       cards={this.state.cards}
       mode={this.state.activeColor}
-      _nextColor={this._nextColor} />
+      _nextColor={this._nextColor}
+      orientation={this.state.orientation} />
     )
+
     return (
-      <View style={[{flex:1}]}>
+      <View style={{flex:1, flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column'}}>
         {rainbowElement}
-        <View style={{flex: 8, backgroundColor: 'powderblue'}}>
+        <View style={{flex: 11, backgroundColor: 'powderblue'}}>
           {multipleChoiceQuestion}
         </View>
         <View style={[{flex:1, backgroundColor: 'powderblue'}]} />
       </View>
-    );
+    )
   }
 }
 
@@ -119,4 +126,4 @@ const initialCards = [
       }
     ]
 
-AppRegistry.registerComponent('YouNiVerse', () => App);
+AppRegistry.registerComponent('YouNiVerse', () => App)

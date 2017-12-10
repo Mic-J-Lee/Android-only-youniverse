@@ -1,13 +1,29 @@
-import React, { Component } from 'react';
-import { TouchableOpacity, Image, Alert, View, StyleSheet } from 'react-native';
+import React, { Component } from 'react'
+import { Alert, Animated, Easing, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 export default class AudioButton extends Component {
-  _showPronunciation = () => {
-    Alert.alert(this.props.sound)
+  constructor() {
+    super()
+    this.spinValue = new Animated.Value(0)
   }
 
-  _checkIfCorrect = () => {
-    if (this.props.isCorrect) this.props._nextColor()
+  componentDidMount() {
+    this.spin()
+  }
+  spin() {
+    this.spinValue.setValue(0)
+    Animated.timing(
+      this.spinValue,
+      {
+        toValue: 1,
+        duration: 18000,
+        easing: Easing.linear
+      }
+    ).start(() => this.spin())
+  }
+
+  _showPronunciation = () => {
+    Alert.alert(this.props.sound)
   }
 
   _playSound = () => {
@@ -21,15 +37,22 @@ export default class AudioButton extends Component {
   }
 
   render() {
+    const spin = this.spinValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['360deg', '0deg']
+      })
     return (
-      <TouchableOpacity onPress={this._playSound}
-                        onLongPress={this.props.size == 'small' ? this._checkIfCorrect : this._showPronunciation}
-                        style={styles[this.props.size]} >
-          <Image style={styles[this.props.size]}
-                 resizeMode='contain' 
-                 source={require(`../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png`)} />
+      <TouchableOpacity 
+        disabled={this.props.disabled}
+        onPress={this._playSound}
+        onLongPress={this.props.size == 'small' ? this.props._checkIfCorrect : this._showPronunciation}
+        style={styles[this.props.size]} >
+        <Animated.Image 
+          style={[styles[this.props.size], {transform: [{rotate: spin}]} ]}
+          resizeMode='contain'
+          source={require('../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png')} />
       </TouchableOpacity>
-    );
+    )
   }
 }
 
@@ -40,8 +63,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   large: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     borderRadius: 100,
   }
 })
