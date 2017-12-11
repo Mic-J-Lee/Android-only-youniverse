@@ -13,7 +13,7 @@ export default class Rainbow extends Component {
       fadedColors = fadedColors.reverse()
     }
     let allStripes = []
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < colors.length; i++) {
       let color = colors[i]
       let fadedColor = fadedColors[i]
       let isEnabled = this.props.rainbow[color]
@@ -30,9 +30,9 @@ export default class Rainbow extends Component {
 
     return (
       <View style={{flex: 2, flexDirection: portrait ? 'row' : 'column'}}>
-        <View style={{flex: 1, backgroundColor: 'powderblue'}} />
+        <View style={{flex: 1}} />
         {allStripes}
-        <View style={{flex: 1, backgroundColor: 'powderblue'}} />
+        <View style={{flex: 1}} />
       </View>
     );
   }

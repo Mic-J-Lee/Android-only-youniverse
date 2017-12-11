@@ -8,7 +8,6 @@ import { _loadSoundObject } from './helpers'
 export default class Choice extends Component {
   constructor() {
     super()
-    this.springValue = new Animated.Value(60)
     this.state = {
       wrongGuess: false
     }

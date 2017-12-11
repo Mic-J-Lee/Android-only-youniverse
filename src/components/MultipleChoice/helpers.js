@@ -1,76 +1,31 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Animated, Easing, View } from 'react-native'
 import Sound from 'react-native-sound'
+import { styles } from './styleModule'
 
-export function _displayQuestion(element) {
-  return(
-    <View style={{flex: 4, alignItems: 'center'}}>
-      {element}
-    </View>
-  )
-}
-
-export function _displayMultipleChoices(multipleChoicesArray) {
+export function _displayMultipleChoices(multipleChoicesArray, isPortrait = true) {
   shuffledArray = _shuffleThisArray(multipleChoicesArray)
   return(
-    <View style={{flex: 5}}>
-      <View style={{flex: 1, flexDirection:'row'}}>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{flex: 5, flexDirection: isPortrait ? 'column' : 'row'}}>
+      <View style={{flex: 1, flexDirection: isPortrait ? 'row' : 'column'}}>
+        <View style={styles.choiceFlexBox}>
           {shuffledArray[0]}
         </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.choiceFlexBox}>
           {shuffledArray[1]}
         </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.choiceFlexBox}>
           {shuffledArray[2]}
         </View>
       </View>
-      <View style={{flex: 1, flexDirection:'row'}}>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{flex: 1, flexDirection: isPortrait ? 'row' : 'column'}}>
+        <View style={styles.choiceFlexBox}>
           {shuffledArray[3]}
         </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.choiceFlexBox}>
           {shuffledArray[4]}
         </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          {shuffledArray[5]}
-        </View>
-      </View>
-    </View>
-  )
-}
-
-export function _displayLandscapeQuestion(element) {
-  return(
-    <View style={{flex: 4, justifyContent: 'center'}}>
-      {element}
-    </View>
-  )
-}
-
-export function _displayLandscapeMultipleChoices(multipleChoicesArray) {
-  shuffledArray = _shuffleThisArray(multipleChoicesArray)
-  return(
-    <View style={{flex: 5, flexDirection: 'row'}}>
-      <View style={{flex: 1}}>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          {shuffledArray[0]}
-        </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          {shuffledArray[1]}
-        </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          {shuffledArray[2]}
-        </View>
-      </View>
-      <View style={{flex: 1}}>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          {shuffledArray[3]}
-        </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-          {shuffledArray[4]}
-        </View>
-        <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.choiceFlexBox}>
           {shuffledArray[5]}
         </View>
       </View>
@@ -94,4 +49,39 @@ export function _loadSoundObject(name, language = 'cantonese') {
 
 export function _shuffleThisArray(array) {
   return array.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
+}
+
+export function _animateQuestionCompletion(choiceValues, questionValue, correctValue) {
+  const animationValues = choiceValues
+  let animations = []
+  for (value of animationValues) {
+    animations.push(Animated.timing(
+      value,
+      { 
+        toValue: 500,
+        useNativeDriver: true,
+        duration: 300,
+        easing: Easing.poly(3)
+      }
+    ))
+  }
+  animations.push(Animated.timing(
+      questionValue,
+      { 
+       toValue: -500,
+       useNativeDriver: true,
+       duration: 500,
+       easing: Easing.cubic
+      }
+    ))
+  animations.push(Animated.timing(
+      correctValue,
+      { 
+       toValue: -500,
+       useNativeDriver: true,
+       duration: 500,
+       easing: Easing.cubic
+      }
+    ))
+  Animated.stagger(50, animations).start()
 }

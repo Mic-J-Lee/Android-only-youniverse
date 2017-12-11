@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, AppRegistry, Dimensions, View } from 'react-native'
+import { Alert, Animated, AppRegistry, Dimensions, Easing, View } from 'react-native'
 import Rainbow from './components/Rainbow/Rainbow'
 import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
 
@@ -27,6 +27,12 @@ export default class App extends Component {
           orientation: dim.height > dim.width ? 'portrait' : 'landscape'
       })
     })
+    this.cloud1 = new Animated.Value(-400)
+    this.cloud2 = new Animated.Value(-400)
+    this.cloud3 = new Animated.Value(-400)
+    this.cloud1y = new Animated.Value(100)
+    this.cloud2y = new Animated.Value(200)
+    this.cloud3y = new Animated.Value(300)
   }
 
   drawSixCards = () => {
@@ -67,6 +73,26 @@ export default class App extends Component {
     this.drawSixCards()
   }
 
+  float(cloud, cloudy) {
+    cloudy.setValue(Dimensions.get('screen').height * Math.random())
+    cloud.setValue(600)
+    Animated.timing(
+      cloud,
+      {
+        toValue: -650,
+        useNativeDriver: true,
+        duration: Math.random() * (100000 - 10000) + 10000,
+        easing: Easing.ease
+      }
+    ).start(() => this.float(cloud, cloudy))
+  }
+
+  componentDidMount() {
+    this.float(this.cloud1, this.cloud1y)
+    this.float(this.cloud2, this.cloud2y)
+    this.float(this.cloud3, this.cloud3y)
+  }
+
   render() {
     const rainbowElement = (<Rainbow 
       activeColor={this.state.activeColor} 
@@ -76,54 +102,54 @@ export default class App extends Component {
     )
     const multipleChoiceQuestion = (<MultipleChoiceQuestion
       cards={this.state.cards}
-      mode={this.state.activeColor}
+      activeColor={this.state.activeColor}
       _nextColor={this._nextColor}
       orientation={this.state.orientation} />
     )
 
     return (
-      <View style={{flex:1, flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column'}}>
+      <View style={{flex:1, flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', backgroundColor: 'powderblue'}}>
+        <Animated.Image source={require('./assets/pictures/cloud1.png')} style={{height:120, position:'absolute', transform: [{translateX: this.cloud1}, {translateY: this.cloud1y}] }} resizeMode='contain' />
+        <Animated.Image source={require('./assets/pictures/cloud2.png')} style={{height:130, position:'absolute', transform: [{translateX: this.cloud2}, {translateY: this.cloud2y}] }} resizeMode='contain' />
+        <Animated.Image source={require('./assets/pictures/cloud3.png')} style={{height:230, position:'absolute', transform: [{translateX: this.cloud3}, {translateY: this.cloud3y}] }} resizeMode='contain' />
         {rainbowElement}
-        <View style={{flex: 11, backgroundColor: 'powderblue'}}>
-          {multipleChoiceQuestion}
-        </View>
-        <View style={[{flex:1, backgroundColor: 'powderblue'}]} />
+        {multipleChoiceQuestion}
       </View>
     )
   }
 }
 
 const initialCards = [
-      {
-        audio: 'jat1',
-        picture: 'english1',
-        writing: 'chinese1'
-      },
-      {
-        audio: 'ji6',
-        picture: 'english2',
-        writing: 'chinese2'
-      },
-      {
-        audio: 'saam1',
-        picture: 'english3',
-        writing: 'chinese3'
-      },
-      {
-        audio: 'sei3',
-        picture: 'english4',
-        writing: 'chinese4'
-      },
-      {
-        audio: 'ng5',
-        picture: 'english5',
-        writing: 'chinese5'
-      },
-      {
-        audio: 'luk6',
-        picture: 'english6',
-        writing: 'chinese6'
-      }
-    ]
+  {
+    audio: 'jat1',
+    picture: 'english1',
+    writing: 'chinese1'
+  },
+  {
+    audio: 'ji6',
+    picture: 'english2',
+    writing: 'chinese2'
+  },
+  {
+    audio: 'saam1',
+    picture: 'english3',
+    writing: 'chinese3'
+  },
+  {
+    audio: 'sei3',
+    picture: 'english4',
+    writing: 'chinese4'
+  },
+  {
+    audio: 'ng5',
+    picture: 'english5',
+    writing: 'chinese5'
+  },
+  {
+    audio: 'luk6',
+    picture: 'english6',
+    writing: 'chinese6'
+  }
+]
 
 AppRegistry.registerComponent('YouNiVerse', () => App)

@@ -4,7 +4,7 @@ import { Animated, TouchableOpacity, View } from 'react-native'
 export default class Stripe extends Component {
   constructor() {
     super()
-    this.springValue = new Animated.Value(60)
+    this.springValue = new Animated.Value(50)
   }
 
   componentDidUpdate(prevProps) {
@@ -17,8 +17,9 @@ export default class Stripe extends Component {
     Animated.spring(
       this.springValue,
       {
-        toValue: 60,
-        friction: 2
+        toValue: 50,
+        friction: 1,
+        tension: 1.5
       }
     ).start()
   }
@@ -26,16 +27,16 @@ export default class Stripe extends Component {
   render() {
     const portrait = this.props.orientation == 'portrait'
     return (
-      <View style={{flex: 1, backgroundColor: 'powderblue'}} >
+      <View style={{flex: 1}} >
         <Animated.View style={{
           flexDirection: portrait ? 'column' : 'row',
-          height: portrait ? this.springValue : 60, 
-          width: portrait ? 60 : this.springValue}}>
+          height: portrait ? this.springValue : 45, 
+          width: portrait ? 45 : this.springValue}}>
           <TouchableOpacity 
             onPress={() => this.props._toggleStripe(this.props.identity)} 
             style={{flex: 4, backgroundColor: this.props.color}} />
-          {!this.props.isActive && <View style={{flex: 1, backgroundColor: 'powderblue'}} />}
-          {!this.props.isEnabled && <View style={{flex: 1, backgroundColor: 'powderblue'}} />}
+          {!this.props.isActive && <View style={{flex: 1}} />}
+          {!this.props.isEnabled && <View style={{flex: 1}} />}
         </Animated.View>
       </View>
     )
