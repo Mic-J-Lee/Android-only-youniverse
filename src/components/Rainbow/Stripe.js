@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Animated, TouchableOpacity, View } from 'react-native'
+import { Animated, TouchableWithoutFeedback, View } from 'react-native'
 
 export default class Stripe extends Component {
   constructor() {
@@ -9,7 +9,6 @@ export default class Stripe extends Component {
 
   componentDidUpdate(prevProps) {
     !prevProps.isActive && this.props.isActive && this.spring()
-    !prevProps.isEnabled && this.props.isEnabled && this.spring()
   }
 
   spring() {
@@ -32,9 +31,10 @@ export default class Stripe extends Component {
           flexDirection: portrait ? 'column' : 'row',
           height: portrait ? this.springValue : 45, 
           width: portrait ? 45 : this.springValue}}>
-          <TouchableOpacity 
-            onPress={() => this.props._toggleStripe(this.props.identity)} 
-            style={{flex: 4, backgroundColor: this.props.color}} />
+          <TouchableWithoutFeedback 
+            onPress={() => this.props._toggleStripe(this.props.identity)}>
+             <View style={{flex: 4, backgroundColor: this.props.color}} />
+          </TouchableWithoutFeedback>
           {!this.props.isActive && <View style={{flex: 1}} />}
           {!this.props.isEnabled && <View style={{flex: 1}} />}
         </Animated.View>

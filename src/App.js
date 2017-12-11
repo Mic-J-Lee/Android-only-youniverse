@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, Animated, AppRegistry, Dimensions, Easing, View } from 'react-native'
+import { Alert, Animated, AppRegistry, Dimensions, Easing, LayoutAnimation, UIManager, View } from 'react-native'
 import Cloud from './components/Cloud/Cloud'
 import Rainbow from './components/Rainbow/Rainbow'
 import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
@@ -27,6 +27,7 @@ export default class App extends Component {
           orientation: dim.height > dim.width ? 'portrait' : 'landscape'
       })
     })
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
   }
 
   drawSixCards = () => {
@@ -46,6 +47,7 @@ export default class App extends Component {
       this._nextColor()
       this.setState({rainbow: rainbowClone})
     } else
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
       this.setState({rainbow: rainbowClone})
   }
 
@@ -63,8 +65,8 @@ export default class App extends Component {
         nextColor++
     }
     // record success result into database
-    this.setState({activeColor: colors[nextColor]})
     this.drawSixCards()
+    this.setState({activeColor: colors[nextColor]})
   }
 
   render() {

@@ -9,41 +9,50 @@ import { styles } from './styleModule'
 export default class MultipleChoiceQuestion extends Component {
   constructor() {
     super()
-    this.answer1 = new Animated.Value(0)
-    this.answer2 = new Animated.Value(0)
-    this.answer3 = new Animated.Value(0)
-    this.answer4 = new Animated.Value(0)
-    this.answer5 = new Animated.Value(0)
-    this.answer6 = new Animated.Value(0)
-    this.correctGo = new Animated.Value(0)
-    this.questionGo = new Animated.Value(0)
-    this.correctCome = new Animated.Value(0)
-    this.questionCome = new Animated.Value(0)
-    this.goAnimationValues = [this.questionGo, this.answer1, this.answer2, this.answer3, this.answer4, this.answer5, this.answer6, this.correctCome, this.questionCome]
+    this.getInFormation = () => {
+      this.answer1 = new Animated.Value(0)
+      this.answer2 = new Animated.Value(0)
+      this.answer3 = new Animated.Value(0)
+      this.answer4 = new Animated.Value(0)
+      this.answer5 = new Animated.Value(0)
+      this.answer6 = new Animated.Value(0)
+      this.correctGo = new Animated.Value(0)
+      this.questionGo = new Animated.Value(0)
+      this.correctCome = new Animated.Value(0)
+      this.questionCome = new Animated.Value(0)
+    }
+    this.getInFormation()
+    this.verticalAnimationValues = [this.answer1, this.answer2, this.answer3, this.answer4, this.answer5, this.answer6, this.correctCome, this.questionCome]
   }
 
-  componentWillReceiveProps() {
-    for (value of this.goAnimationValues) {
-      value.setValue(-500)
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.activeColor != this.props.activeColor) {
+      for (value of this.verticalAnimationValues) {
+        value.setValue(-500)
+      }
+      this.correctGo.setValue(0)
+      this.questionGo.setValue(0)
+    } else {
+      this.getInFormation()
     }
-    this.correctGo.setValue(0)
-    this.questionGo.setValue(0)
   }
 
-  componentDidUpdate() {
-    animations = []
-    for (value of this.goAnimationValues) {
-      animations.push(Animated.timing(
-        value,
-        { 
-          toValue: 0,
-          useNativeDriver: true,
-          duration: 500,
-          easing: Easing.elastic(1),
-        }
-      ))
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.activeColor != this.props.activeColor) {
+      animations = []
+      for (value of this.verticalAnimationValues) {
+        animations.push(Animated.timing(
+          value,
+          { 
+            toValue: 0,
+            useNativeDriver: true,
+            duration: 500,
+            easing: Easing.elastic(1),
+          }
+        ))
+      }
+      Animated.parallel(animations).start()
     }
-    Animated.parallel(animations).start()
   }
 
   getQuestion = () => {
@@ -51,13 +60,20 @@ export default class MultipleChoiceQuestion extends Component {
     const content = this.props.cards[0][type]
     if (type == 'audio') 
       return (
-        <Animated.View style={{ transform: [{translateX: this.questionGo}, {translateY: this.questionCome}] }}>
-          <AudioButton sound={content} size='large' soundObject={_loadSoundObject(content)} />
+        <Animated.View 
+          style={{ transform: [{translateX: this.questionGo}, {translateY: this.questionCome}] }}>
+          <AudioButton 
+            sound={content} 
+            size='large' 
+            soundObject={_loadSoundObject(content)} />
         </Animated.View>
       )
     return (
-      <Animated.View style={{ transform: [{translateX: this.questionGo}, {translateY: this.questionCome}] }}>
-        <PictureButton picture={content} size='large' />
+      <Animated.View 
+        style={{ transform: [{translateX: this.questionGo}, {translateY: this.questionCome}] }}>
+        <PictureButton 
+          picture={content} 
+          size='large' />
       </Animated.View>
     )
   }
@@ -71,7 +87,10 @@ export default class MultipleChoiceQuestion extends Component {
     const animationValues = [this.answer1, this.answer2, this.answer3, this.answer4, this.answer5, this.answer6]
     for (let i = 0; i < choices.length; i++) {
       output.push(
-        <Animated.View style={{ transform: choices[i] == correct ? [{translateX: this.correctGo}, {translateY: this.correctCome}] : [{translateY: animationValues[i]}] }}>
+        <Animated.View 
+          style={{ transform: choices[i] == correct ? 
+            [{translateX: this.correctGo}, {translateY: this.correctCome}] : 
+            [{translateY: animationValues[i]}] }}>
           <Choice 
             type={type} 
             content={choices[i]}
