@@ -3,8 +3,7 @@ import { Alert, Animated, Easing, Image, StyleSheet, TouchableOpacity } from 're
 import { styles } from './styleModule'
 
 export default class AudioButton extends Component {
-  constructor() {
-    super()
+  componentWillMount() {
     this.spinValue = new Animated.Value(0)
   }
 

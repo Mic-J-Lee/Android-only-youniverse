@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { Animated, TouchableWithoutFeedback, View } from 'react-native'
 
 export default class Stripe extends Component {
-  constructor() {
-    super()
+  componentWillMount() {
     this.springValue = new Animated.Value(50)
   }
 

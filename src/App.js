@@ -8,8 +8,15 @@ export default class App extends Component {
   constructor() {
     super()
     let dim = Dimensions.get('screen')
+    Dimensions.addEventListener('change', () => {
+      dim = Dimensions.get('screen')
+      this.setState({
+          orientation: dim.height > dim.width ? 'portrait' : 'landscape'
+      })
+    })
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     this.state = {
-      activeColor: 'red',
+      orientation: dim.height > dim.width ? 'portrait' : 'landscape',
       rainbow: {
         red: true,
         orange: true,
@@ -18,23 +25,20 @@ export default class App extends Component {
         blue: true,
         purple: true
       },
+      activeColor: 'red',
       cards: initialCards,
-      orientation: dim.height > dim.width ? 'portrait' : 'landscape'
+      correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
+      wrongGuesses: []
     }
-    Dimensions.addEventListener('change', () => {
-      dim = Dimensions.get('screen')
-      this.setState({
-          orientation: dim.height > dim.width ? 'portrait' : 'landscape'
-      })
-    })
-    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
   }
 
   drawSixCards = () => {
     //access database, obtain one correct card and five dummies
     shuffledCards = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
     this.setState({
-      cards: shuffledCards
+      cards: shuffledCards,
+      correctCard: shuffledCards[Math.floor(Math.random()*shuffledCards.length)],
+      wrongGuesses: []
     })
   }
 
@@ -69,6 +73,12 @@ export default class App extends Component {
     this.setState({activeColor: colors[nextColor]})
   }
 
+  _wrongGuess = (guess) => {
+    let wrongGuessesClone = [...this.state.wrongGuesses]
+    wrongGuessesClone.push(guess)
+    this.setState({wrongGuesses: wrongGuessesClone})
+  }
+
   render() {
     const clouds = (
     <View>
@@ -77,7 +87,7 @@ export default class App extends Component {
       <Cloud image={'cloud3'} size={230} />
     </View>
     )
-    const rainbowElement = (<Rainbow 
+    const rainbow = (<Rainbow 
       activeColor={this.state.activeColor} 
       rainbow={this.state.rainbow} 
       _toggleStripe={this._toggleStripe.bind(this)} 
@@ -85,15 +95,19 @@ export default class App extends Component {
     )
     const multipleChoiceQuestion = (<MultipleChoiceQuestion
       cards={this.state.cards}
+      rainbow={this.state.rainbow}
+      orientation={this.state.orientation}
+      correctCard={this.state.correctCard}
       activeColor={this.state.activeColor}
       _nextColor={this._nextColor}
-      orientation={this.state.orientation} />
+      _wrongGuess={this._wrongGuess}
+      wrongGuesses={this.state.wrongGuesses} />
     )
 
     return (
       <View style={{flex:1, flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', backgroundColor: 'powderblue'}}>
         {clouds}
-        {rainbowElement}
+        {rainbow}
         {multipleChoiceQuestion}
       </View>
     )

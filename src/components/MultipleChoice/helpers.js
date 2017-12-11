@@ -4,29 +4,28 @@ import Sound from 'react-native-sound'
 import { styles } from './styleModule'
 
 export function _displayMultipleChoices(multipleChoicesArray, isPortrait = true) {
-  shuffledArray = _shuffleThisArray(multipleChoicesArray)
   return(
     <View style={{flex: 5, flexDirection: isPortrait ? 'column' : 'row'}}>
       <View style={{flex: 1, flexDirection: isPortrait ? 'row' : 'column'}}>
         <View style={styles.choiceFlexBox}>
-          {shuffledArray[0]}
+          {multipleChoicesArray[0]}
         </View>
         <View style={styles.choiceFlexBox}>
-          {shuffledArray[1]}
+          {multipleChoicesArray[1]}
         </View>
         <View style={styles.choiceFlexBox}>
-          {shuffledArray[2]}
+          {multipleChoicesArray[2]}
         </View>
       </View>
       <View style={{flex: 1, flexDirection: isPortrait ? 'row' : 'column'}}>
         <View style={styles.choiceFlexBox}>
-          {shuffledArray[3]}
+          {multipleChoicesArray[3]}
         </View>
         <View style={styles.choiceFlexBox}>
-          {shuffledArray[4]}
+          {multipleChoicesArray[4]}
         </View>
         <View style={styles.choiceFlexBox}>
-          {shuffledArray[5]}
+          {multipleChoicesArray[5]}
         </View>
       </View>
     </View>
@@ -58,7 +57,7 @@ export function _animateQuestionCompletion(choiceValues, questionValue, correctV
     animations.push(Animated.timing(
       value,
       { 
-        toValue: 500,
+        toValue: {x: 0, y: 500},
         useNativeDriver: true,
         duration: 300,
         easing: Easing.poly(3)
@@ -68,7 +67,7 @@ export function _animateQuestionCompletion(choiceValues, questionValue, correctV
   animations.push(Animated.timing(
       questionValue,
       { 
-       toValue: -500,
+       toValue: {x: -500, y: 0},
        useNativeDriver: true,
        duration: 500,
        easing: Easing.cubic
@@ -77,7 +76,7 @@ export function _animateQuestionCompletion(choiceValues, questionValue, correctV
   animations.push(Animated.timing(
       correctValue,
       { 
-       toValue: -500,
+       toValue: {x: -500, y: 0},
        useNativeDriver: true,
        duration: 500,
        easing: Easing.cubic
