@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Alert, Animated, AppRegistry, Dimensions, Easing, View } from 'react-native'
+import Cloud from './components/Cloud/Cloud'
 import Rainbow from './components/Rainbow/Rainbow'
 import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
-
 
 export default class App extends Component {
   constructor() {
@@ -27,12 +27,6 @@ export default class App extends Component {
           orientation: dim.height > dim.width ? 'portrait' : 'landscape'
       })
     })
-    this.cloud1 = new Animated.Value(-400)
-    this.cloud2 = new Animated.Value(-400)
-    this.cloud3 = new Animated.Value(-400)
-    this.cloud1y = new Animated.Value(100)
-    this.cloud2y = new Animated.Value(200)
-    this.cloud3y = new Animated.Value(300)
   }
 
   drawSixCards = () => {
@@ -73,27 +67,14 @@ export default class App extends Component {
     this.drawSixCards()
   }
 
-  float(cloud, cloudy) {
-    cloudy.setValue(Dimensions.get('screen').height * Math.random())
-    cloud.setValue(600)
-    Animated.timing(
-      cloud,
-      {
-        toValue: -650,
-        useNativeDriver: true,
-        duration: Math.random() * (100000 - 10000) + 10000,
-        easing: Easing.ease
-      }
-    ).start(() => this.float(cloud, cloudy))
-  }
-
-  componentDidMount() {
-    this.float(this.cloud1, this.cloud1y)
-    this.float(this.cloud2, this.cloud2y)
-    this.float(this.cloud3, this.cloud3y)
-  }
-
   render() {
+    const clouds = (
+    <View>
+      <Cloud image={'cloud1'} size={120} />
+      <Cloud image={'cloud2'} size={130} />
+      <Cloud image={'cloud3'} size={230} />
+    </View>
+    )
     const rainbowElement = (<Rainbow 
       activeColor={this.state.activeColor} 
       rainbow={this.state.rainbow} 
@@ -109,9 +90,7 @@ export default class App extends Component {
 
     return (
       <View style={{flex:1, flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', backgroundColor: 'powderblue'}}>
-        <Animated.Image source={require('./assets/pictures/cloud1.png')} style={{height:120, position:'absolute', transform: [{translateX: this.cloud1}, {translateY: this.cloud1y}] }} resizeMode='contain' />
-        <Animated.Image source={require('./assets/pictures/cloud2.png')} style={{height:130, position:'absolute', transform: [{translateX: this.cloud2}, {translateY: this.cloud2y}] }} resizeMode='contain' />
-        <Animated.Image source={require('./assets/pictures/cloud3.png')} style={{height:230, position:'absolute', transform: [{translateX: this.cloud3}, {translateY: this.cloud3y}] }} resizeMode='contain' />
+        {clouds}
         {rainbowElement}
         {multipleChoiceQuestion}
       </View>

@@ -10,3 +10,7 @@ exports.chinese3 = require('./chinesethree.png')
 exports.chinese4 = require('./chinesefour.png')
 exports.chinese5 = require('./chinesefive.jpg')
 exports.chinese6 = require('./chinesesix.png')
+exports.cloud1 = require('./cloud1.png')
+exports.cloud2 = require('./cloud2.png')
+exports.cloud3 = require('./cloud3.png')
+

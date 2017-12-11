@@ -23,7 +23,6 @@ export default class MultipleChoiceQuestion extends Component {
   }
 
   componentWillReceiveProps() {
-
     for (value of this.goAnimationValues) {
       value.setValue(-500)
     }
