@@ -43,7 +43,8 @@ export default class MultipleChoiceQuestion extends Component {
     for (let i = 0; i < choices.length; i++) {
       let isCorrect = choices[i] == correct
       output.push(
-          <Choice 
+          <Choice
+            key={choices[i]} 
             status={this.state.status}
             type={type} 
             content={choices[i]}

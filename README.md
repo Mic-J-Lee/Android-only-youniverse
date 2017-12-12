@@ -1,2 +1,2 @@
 # You-Ni-Verse
-versatility is key.
+A universal? (potentially) language learning flashcard App

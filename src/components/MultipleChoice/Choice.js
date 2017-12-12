@@ -12,21 +12,6 @@ export default class Choice extends Component {
   componentDidUpdate(prevProps) {
     this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this.exitScreenInTriumph(), 450)
     this.props.status == 'animating' && !this.props.isCorrect && setTimeout(()=>this.exitScreenInDespair(), Math.random() * 300)
-    this.props.status == 'ready' && prevProps.status == 'animating' && this.enterScreen(()=>{this.animatedValue.setValue({ x: 0, y: 0})})
-    this.props.activeColor != prevProps.activeColor && this.enterScreen()
-
-  }
-
-  enterScreen() {
-    this.animatedValue.setValue({ x: 0, y: -500})
-    Animated.spring(
-      this.animatedValue,
-      { 
-        toValue: {x: 0, y: 0},
-        useNativeDriver: true,
-        duration: 500,
-      }
-    ).start()
   }
 
   exitScreenInTriumph() {
@@ -70,7 +55,6 @@ export default class Choice extends Component {
         <AudioButton 
           sound={content} 
           size='small' 
-          soundObject={_loadSoundObject(content)} 
           isCorrect={this.props.isCorrect} 
           _checkIfCorrect={this._checkIfCorrect}
           disabled={this.props.wrongGuesses.includes(content)} />
@@ -78,7 +62,8 @@ export default class Choice extends Component {
     )
     const pictureButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
-        <PictureButton 
+        <PictureButton
+          status={this.props.status} 
           picture={content}
           size='small' 
           isCorrect={this.props.isCorrect} 

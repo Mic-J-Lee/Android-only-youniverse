@@ -1,6 +1,5 @@
 import React from 'react'
 import { Animated, Easing, View } from 'react-native'
-import Sound from 'react-native-sound'
 import { styles } from './styleModule'
 
 export function _displayMultipleChoices(multipleChoicesArray, isPortrait = true) {
@@ -39,11 +38,6 @@ export const modes = {
   green: {question: 'writing', answers: 'picture'},
   blue: {question: 'audio', answers: 'writing'},
   purple: {question: 'picture', answers: 'audio'}
-}
-
-export function _loadSoundObject(name, language = 'cantonese') {
-  whoosh = new Sound(language + '_' + name + '.mp3', Sound.MAIN_BUNDLE)
-  return whoosh
 }
 
 export function _shuffleThisArray(array) {

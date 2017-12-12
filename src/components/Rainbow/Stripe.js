@@ -31,7 +31,8 @@ export default class Stripe extends Component {
           height: portrait ? this.springValue : 45, 
           width: portrait ? 45 : this.springValue}}>
           <TouchableWithoutFeedback 
-            onPress={() => this.props._toggleStripe(this.props.identity)}>
+            onLongPress={() => this.props._toggleStripe(this.props.identity)}
+            onPress={() => this.props._activateStripe(this.props.identity)}>
              <View style={{flex: 4, backgroundColor: this.props.color}} />
           </TouchableWithoutFeedback>
           {!this.props.isActive && <View style={{flex: 1}} />}

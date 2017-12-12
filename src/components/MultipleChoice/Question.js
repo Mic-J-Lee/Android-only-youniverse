@@ -46,8 +46,7 @@ export default class Question extends Component {
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
         <AudioButton 
           sound={content} 
-          size='large' 
-          soundObject={_loadSoundObject(content)} />
+          size='large' />
       </Animated.View>
     )
     const pictureButton = (

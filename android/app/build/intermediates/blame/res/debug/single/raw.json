@@ -1,5 +1,17 @@
 [
     {
+        "merged": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_saam1.mp3",
+        "source": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/src/main/res/raw/cantonese_saam1.mp3"
+    },
+    {
+        "merged": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_ji6.mp3",
+        "source": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/src/main/res/raw/cantonese_ji6.mp3"
+    },
+    {
+        "merged": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_sei3.mp3",
+        "source": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/src/main/res/raw/cantonese_sei3.mp3"
+    },
+    {
         "merged": "/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_saam1.mp3",
         "source": "/Users/michaellee/Desktop/YouNiVerse/android/app/src/main/res/raw/cantonese_saam1.mp3"
     },
@@ -16,11 +28,23 @@
         "source": "/Users/michaellee/Desktop/YouNiVerse/android/app/src/main/res/raw/cantonese_ji6.mp3"
     },
     {
+        "merged": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_ng5.mp3",
+        "source": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/src/main/res/raw/cantonese_ng5.mp3"
+    },
+    {
+        "merged": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_luk6.mp3",
+        "source": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/src/main/res/raw/cantonese_luk6.mp3"
+    },
+    {
         "merged": "/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_sei3.mp3",
         "source": "/Users/michaellee/Desktop/YouNiVerse/android/app/src/main/res/raw/cantonese_sei3.mp3"
     },
     {
         "merged": "/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_luk6.mp3",
         "source": "/Users/michaellee/Desktop/YouNiVerse/android/app/src/main/res/raw/cantonese_luk6.mp3"
+    },
+    {
+        "merged": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/res/merged/debug/raw/cantonese_jat1.mp3",
+        "source": "/Users/michaellee/Desktop/test/YouNiVerse/android/app/src/main/res/raw/cantonese_jat1.mp3"
     }
 ]

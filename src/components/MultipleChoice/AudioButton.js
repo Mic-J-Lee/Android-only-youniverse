@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { Alert, Animated, Easing, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { styles } from './styleModule'
+import Sound from 'react-native-sound'
+
 
 export default class AudioButton extends Component {
-  componentWillMount() {
+  componentWillMount(language = 'cantonese') {
     this.spinValue = new Animated.Value(0)
+    this.whoosh = new Sound(language + '_' + this.props.sound + '.mp3', Sound.MAIN_BUNDLE)
   }
 
   componentDidMount() {
@@ -29,13 +32,11 @@ export default class AudioButton extends Component {
   }
 
   _playSound = () => {
-    whoosh = this.props.soundObject
-    whoosh.play((success) => {if (!success) whoosh.reset() })
+    this.whoosh.play((success) => {if (!success) whoosh.reset() })
   }
 
   componentWillUnmount() {
-    whoosh = this.props.soundObject
-    whoosh.release()
+    this.whoosh.release()
   }
 
   render() {

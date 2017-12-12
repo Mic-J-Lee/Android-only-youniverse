@@ -40,7 +40,7 @@ export default class Cloud extends Component {
         toValue: -600,
         useNativeDriver: true,
         duration: Math.random() * (100000 - 10000) + 10000,
-        easing: Easing.ease,
+        easing: Easing.linear,
       }
     ).start((o) => {
       if (o.finished) {      

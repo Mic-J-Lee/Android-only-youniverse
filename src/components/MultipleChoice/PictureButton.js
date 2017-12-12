@@ -10,7 +10,7 @@ export default class PictureButton extends Component {
     return (
       <TouchableOpacity style={styles[this.props.size + 'RoundedSquare']}
                         onPress={this.props._checkIfCorrect}
-                        disabled={disabled} >
+                        disabled={disabled || this.props.status == 'animating' || this.props.size == 'large'} >
         <View style={{justifyContent: 'center', alignItems: 'center'}} >
           <Image source={Images[this.props.picture]}
                  style={[styles[this.props.size + 'RoundedSquare'], {opacity: disabled ? .5 : 1}]} />

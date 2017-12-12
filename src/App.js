@@ -55,6 +55,13 @@ export default class App extends Component {
       this.setState({rainbow: rainbowClone})
   }
 
+  _activateStripe(color) {
+    if (this.state.rainbow[color] && this.state.activeColor != color) {
+      this.drawSixCards()
+      this.setState({activeColor: color})
+    }
+  }
+
   _nextColor = () => {
     const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
     currentColor = colors.indexOf(this.state.activeColor)
@@ -91,6 +98,7 @@ export default class App extends Component {
       activeColor={this.state.activeColor} 
       rainbow={this.state.rainbow} 
       _toggleStripe={this._toggleStripe.bind(this)} 
+      _activateStripe={this._activateStripe.bind(this)} 
       orientation={this.state.orientation} />
     )
     const multipleChoiceQuestion = (<MultipleChoiceQuestion

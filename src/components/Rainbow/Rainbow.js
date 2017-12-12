@@ -24,6 +24,7 @@ export default class Rainbow extends Component {
                 isActive={this.props.activeColor == color}
                 isEnabled={isEnabled}
                 _toggleStripe={this.props._toggleStripe}
+                _activateStripe={this.props._activateStripe}
                 orientation={this.props.orientation} />
       )
     }
