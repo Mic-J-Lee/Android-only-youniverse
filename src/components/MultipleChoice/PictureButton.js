@@ -14,7 +14,7 @@ export default class PictureButton extends Component {
         <View style={{justifyContent: 'center', alignItems: 'center'}} >
           <Image source={Images[this.props.picture]}
                  style={[styles[this.props.size + 'RoundedSquare'], {opacity: disabled ? .5 : 1}]} />
-          {disabled && <Text style={styles.x}>X</Text>}
+          {disabled && <Image source={require('../../assets/pictures/red_x.png')} style={styles.redX} />}
         </View>
       </TouchableOpacity>
     )

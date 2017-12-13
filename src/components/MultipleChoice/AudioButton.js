@@ -49,11 +49,12 @@ export default class AudioButton extends Component {
         disabled={this.props.disabled}
         onPress={this._playSound}
         onLongPress={this.props.size == 'small' ? this.props._checkIfCorrect : this._showPronunciation}
-        style={styles[this.props.size + 'Circle']} >
+        style={[styles[this.props.size + 'Circle'], {justifyContent: 'center', alignItems: 'center'} ]} >
         <Animated.Image 
-          style={[styles[this.props.size + 'Circle'], {transform: [{rotate: spin}]}, {opacity: this.props.disabled ? .5 : 1} ]}
+          style={[styles[this.props.size + 'Circle'], {transform: [{rotate: spin}], opacity: this.props.disabled ? .5 : 1} ]}
           resizeMode='contain'
           source={require('../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png')} />
+        {this.props.disabled && <Image source={require('../../assets/pictures/red_x.png')} style={styles.redX} />} 
       </TouchableOpacity>
     )
   }

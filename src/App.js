@@ -50,9 +50,10 @@ export default class App extends Component {
     else if (color == this.state.activeColor) {
       this._nextColor()
       this.setState({rainbow: rainbowClone})
-    } else
+    } else {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
       this.setState({rainbow: rainbowClone})
+    }
   }
 
   _activateStripe(color) {
@@ -88,11 +89,11 @@ export default class App extends Component {
 
   render() {
     const clouds = (
-    <View>
-      <Cloud image={'cloud1'} size={120} />
-      <Cloud image={'cloud2'} size={130} />
-      <Cloud image={'cloud3'} size={230} />
-    </View>
+      <View>
+        <Cloud image={'cloud1'} size={120} />
+        <Cloud image={'cloud2'} size={130} />
+        <Cloud image={'cloud3'} size={230} />
+      </View>
     )
     const rainbow = (<Rainbow 
       activeColor={this.state.activeColor} 

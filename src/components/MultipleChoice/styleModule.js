@@ -22,11 +22,11 @@ export const styles = StyleSheet.create({
     height: 200,
     borderRadius: 25,
   },
-  x: {
-    opacity: .25,
+  redX: {
+    width: 120,
+    height: 120,
     position: 'absolute',
-    fontSize: 150,
-    color: 'red'
+    opacity: .5
   },
   choiceFlexBox: {
     flex:1, 

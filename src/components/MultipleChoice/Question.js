@@ -11,7 +11,7 @@ export default class Question extends Component {
 
   componentDidUpdate(prevProps) {
     this.props.status == 'animating' && setTimeout(()=>this.exitScreenInTriumph(), 500)
-    this.props.status == 'ready' && prevProps.status == 'animating' && this.enterScreen(()=>{this.animatedValue.setValue({ x: 0, y: 0})})
+    prevProps.status == 'animating' && this.props.status == 'ready' && this.enterScreen()
     this.props.activeColor != prevProps.activeColor && this.enterScreen()
   }
 
@@ -24,7 +24,7 @@ export default class Question extends Component {
         useNativeDriver: true,
         duration: 500,
       }
-    ).start()
+    ).start(()=>{this.animatedValue.setValue({ x: 0, y: 0})})
   }
 
   exitScreenInTriumph() {
