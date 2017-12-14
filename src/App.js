@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Alert, Animated, AppRegistry, Dimensions, Easing, LayoutAnimation, UIManager, View } from 'react-native'
+import Ivan from './components/Ivan/Ivan'
 import Cloud from './components/Cloud/Cloud'
 import Rainbow from './components/Rainbow/Rainbow'
 import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
@@ -118,6 +119,7 @@ export default class App extends Component {
         {clouds}
         {rainbow}
         {multipleChoiceQuestion}
+        <Ivan/>
       </View>
     )
   }
