@@ -119,7 +119,7 @@ export default class App extends Component {
         {clouds}
         {rainbow}
         {multipleChoiceQuestion}
-        <Ivan/>
+        <Ivan orientation={this.state.orientation} />
       </View>
     )
   }

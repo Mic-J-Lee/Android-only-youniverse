@@ -13,33 +13,35 @@ export default class Ivan extends Component {
   componentWillMount() {
     this.ivanStartingPosition = {x: 20, y : 80}
     this.ivanFlap = new Animated.Value(0)
-    this.position = new Animated.ValueXY({x: 20, y : 80})
+    this.ivanPosition = new Animated.ValueXY({x: 20, y : 80})
     this._value = {x: 20, y: 80}
-    this.position.addListener((value) => this._value = value)
+    this.ivanPosition.addListener((value) => this._value = value)
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderGrant: (e, gestureState) => {
-        this.position.setOffset({
+        this.ivanPosition.setOffset({
           x: this._value.x,
           y: this._value.y,
         })
-        this.position.setValue({ x: 0, y: 0})
+        this.ivanPosition.setValue({ x: 0, y: 0})
         this.setState({flyingAround: true})
-        setTimeout(()=>this.flap(), 100)
+        setTimeout(()=>this.flap(), 0)
+        this.getBackHere = setInterval(()=>this.stayOnScreen(), 1)
       },
       onPanResponderMove: Animated.event([
-        null, { dx: this.position.x, dy: this.position.y}
+        null, { dx: this.ivanPosition.x, dy: this.ivanPosition.y}
       ])
       ,
       onPanResponderRelease: (e, gestureState) => {
-        this.position.flattenOffset()
-        Animated.decay(this.position, {
+        this.ivanPosition.flattenOffset()
+        Animated.decay(this.ivanPosition, {
           useNativeDriver: true,
-          deceleration: 0.997,
+          deceleration: 0.996,
           velocity: { x: gestureState.vx, y: gestureState.vy }
         }).start(()=>{
           this.setState({flyingAround: false})
+          clearInterval(this.getBackHere)
           this.float()
         })
       },
@@ -48,24 +50,42 @@ export default class Ivan extends Component {
     this.float()
   }
 
+  componentDidUpdate() {
+    this.stayOnScreen()
+  }
+
+  stayOnScreen() {
+    if (this.props.orientation == 'portrait') {
+      if (this._value.x < -18) this.ivanPosition.x.setValue(-18)
+      if (this._value.x > 313) this.ivanPosition.x.setValue(313)
+      if (this._value.y < -18) this.ivanPosition.y.setValue(-18)
+      if (this._value.y > 570) this.ivanPosition.y.setValue(570)
+    } else {
+      if (this._value.y < -18) this.ivanPosition.y.setValue(-18)
+      if (this._value.y > 288) this.ivanPosition.y.setValue(288)
+      if (this._value.x < -18) this.ivanPosition.x.setValue(-18)
+      if (this._value.x > 590) this.ivanPosition.x.setValue(590)
+    }
+  }
+
   float() {
     let startingPosition = this._value.y
     Animated.sequence([
       Animated.timing(
-        this.position['y'],
+        this.ivanPosition['y'],
         {
           toValue: startingPosition + 10,
           useNativeDriver: true,
-          duration: this.state.flyingAround ? 20 : 1000,
+          duration: this.state.flyingAround ? 35 : 1000,
           easing: Easing.ease,
         }
       ),
       Animated.timing(
-        this.position['y'],
+        this.ivanPosition['y'],
         {
           toValue: startingPosition,
           useNativeDriver: true,
-          duration: this.state.flyingAround ? 20 : 1000,
+          duration: this.state.flyingAround ? 35 : 1000,
           easing: Easing.ease,
         }
       )
@@ -83,7 +103,7 @@ export default class Ivan extends Component {
         this.ivanFlap,
         {
           toValue: 1,
-          duration: this.state.flyingAround ? 20 : 1000,
+          duration: this.state.flyingAround ? 35 : 1000,
           easing: Easing.ease,
           useNativeDriver: true
         }
@@ -92,7 +112,7 @@ export default class Ivan extends Component {
         this.ivanFlap,
         {
           toValue: 0,
-          duration: this.state.flyingAround ? 20 : 1000,
+          duration: this.state.flyingAround ? 35 : 1000,
           easing: Easing.linear,
           useNativeDriver: true
         }
@@ -116,7 +136,7 @@ export default class Ivan extends Component {
       })
 
     return (
-      <Animated.View style={{height: 80, width: 80, position:'absolute', transform: this.position.getTranslateTransform(), alignItems: 'center', justifyContent: 'center'}} {...this.panResponder.panHandlers} >
+      <Animated.View style={{height: 70, width: 65, position:'absolute', transform: this.ivanPosition.getTranslateTransform(), alignItems: 'center', justifyContent: 'center'}} {...this.panResponder.panHandlers} >
         <Animated.Image 
           source={Images.ivans_right_wing} 
           style={{
