@@ -17,11 +17,12 @@ export default class MultipleChoiceQuestion extends Component {
     this.setState({status: 'animating'})
   }
 
-  componentWillReceiveProps(){
-    this.setState({status: 'ready'})
+  componentWillReceiveProps(newProps){
+    if (newProps.status == 'paused') this.setState({status:'paused'})
+    else this.setState({status: 'ready'})
   }
 
-  getQuestion = () => {
+  _getQuestion = () => {
     const type = modes[this.props.activeColor]['question']
     const content = this.props.correctCard[type]
     return (
@@ -34,7 +35,7 @@ export default class MultipleChoiceQuestion extends Component {
     )
   }
   
-  getchoices = () => {
+  _getchoices = () => {
     const type = modes[this.props.activeColor]['answers']
     const correct = this.props.correctCard[type]
     let choices = []
@@ -59,8 +60,8 @@ export default class MultipleChoiceQuestion extends Component {
   }
 
   render() {
-    const choices = this.getchoices()
-    const question = this.getQuestion()
+    const choices = this._getchoices()
+    const question = this._getQuestion()
     const isPortrait = this.props.orientation == 'portrait'
 
     _displayQuestion = (question) => {

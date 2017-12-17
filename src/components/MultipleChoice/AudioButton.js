@@ -11,10 +11,10 @@ export default class AudioButton extends Component {
   }
 
   componentDidMount() {
-    this.spin()
+    this._spin()
   }
 
-  spin() {
+  _spin() {
     this.spinValue.setValue(0)
     Animated.timing(
       this.spinValue,
@@ -24,7 +24,7 @@ export default class AudioButton extends Component {
         easing: Easing.linear,
         useNativeDriver: true
       }
-    ).start(() => this.spin())
+    ).start(() => this._spin())
   }
 
   _showPronunciation = () => {

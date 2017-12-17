@@ -1,38 +1,39 @@
 import React, { Component } from 'react'
-import { Animated, Easing, Dimensions, PanResponder, View } from 'react-native'
+import { Animated, Easing, Dimensions, PanResponder, TouchableWithoutFeedback, View } from 'react-native'
 import Images from '../../assets/pictures/dynamicRequire'
 
 export default class Ivan extends Component {
   constructor() {
     super()
     this.state = ({
-      flyingAround: false
+      flyingAround: false,
+      wingsInvisible: false,
+      roomForExpansion: false
     })
   }
 
   componentWillMount() {
     this.ivanStartingPosition = {x: 20, y : 80}
     this.ivanFlap = new Animated.Value(0)
+    this.ivanBurger = new Animated.Value(1)
     this.ivanPosition = new Animated.ValueXY({x: 20, y : 80})
-    this._value = {x: 20, y: 80}
-    this.ivanPosition.addListener((value) => this._value = value)
+    this._ivanPositionValue = {x: 20, y: 80}
+    this.ivanPosition.addListener((value) => this._ivanPositionValue = value)
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => gestureState.dx != 0 && gestureState.dy != 0 && !this.state.roomForExpansion,
       onPanResponderGrant: (e, gestureState) => {
         this.ivanPosition.setOffset({
-          x: this._value.x,
-          y: this._value.y,
+          x: this._ivanPositionValue.x,
+          y: this._ivanPositionValue.y,
         })
         this.ivanPosition.setValue({ x: 0, y: 0})
         this.setState({flyingAround: true})
-        setTimeout(()=>this.flap(), 0)
-        this.getBackHere = setInterval(()=>this.stayOnScreen(), 1)
+        setTimeout(()=>this._flap(), 0)
+        this.getBackHere = setInterval(()=>this._stayOnScreen(), 1)
       },
       onPanResponderMove: Animated.event([
         null, { dx: this.ivanPosition.x, dy: this.ivanPosition.y}
-      ])
-      ,
+      ]),
       onPanResponderRelease: (e, gestureState) => {
         this.ivanPosition.flattenOffset()
         Animated.decay(this.ivanPosition, {
@@ -42,34 +43,97 @@ export default class Ivan extends Component {
         }).start(()=>{
           this.setState({flyingAround: false})
           clearInterval(this.getBackHere)
-          this.float()
+          this._float()
         })
       },
     })
-    this.flap()
-    this.float()
+    this._flap()
+    this._float()
   }
 
   componentDidUpdate() {
-    this.stayOnScreen()
+    !this.state.roomForExpansion && this._stayOnScreen()
   }
 
-  stayOnScreen() {
-    if (this.props.orientation == 'portrait') {
-      if (this._value.x < -18) this.ivanPosition.x.setValue(-18)
-      if (this._value.x > 313) this.ivanPosition.x.setValue(313)
-      if (this._value.y < -18) this.ivanPosition.y.setValue(-18)
-      if (this._value.y > 570) this.ivanPosition.y.setValue(570)
-    } else {
-      if (this._value.y < -18) this.ivanPosition.y.setValue(-18)
-      if (this._value.y > 288) this.ivanPosition.y.setValue(288)
-      if (this._value.x < -18) this.ivanPosition.x.setValue(-18)
-      if (this._value.x > 590) this.ivanPosition.x.setValue(590)
-    }
+  _toggleSettings() {
+    if (this.state.wingsInvisible) this._deactivateSettings()
+    else this._activateSettings()
   }
 
-  float() {
-    let startingPosition = this._value.y
+  _activateSettings() {
+    this.props._pause()
+    this.setState({roomForExpansion:true})
+    this.ivanPosition.setOffset({x: -15, y: -15})
+    setTimeout(()=>this.setState({wingsInvisible:true}), 280)
+    this.ivanPositionBeforeSettings = this._ivanPositionValue
+    this.ivanBurger.setValue(1)
+    Animated.sequence([
+      Animated.spring(
+        this.ivanBurger,
+        {
+          toValue: 7,
+          useNativeDriver: true,
+          duration: 1000,
+
+        }
+      ),
+      Animated.timing(
+        this.ivanPosition,
+        {
+          toValue: {x: 0, y: 0},
+          useNativeDriver: true,
+          duration: 200,
+          easing:Easing.ease
+        }
+      )
+    ]).start(()=>this.props._activateSettings())
+  }
+
+  _deactivateSettings() {
+    this.props._deactivateSettings()
+    this.ivanPosition.setValue({x:15,y:15})
+    this.ivanPosition.flattenOffset()
+    this.setState({roomForExpansion:false})
+    this.setState({
+      wingsInvisible: false,
+      flyingAround: true
+    })
+    this.ivanBurger.setValue(7)
+    Animated.sequence([
+      Animated.spring(
+        this.ivanBurger,
+        {
+          toValue: 1,
+          useNativeDriver: true,
+          duration: 200,
+
+        }
+      ),
+      Animated.timing(
+        this.ivanPosition,
+        {
+          toValue: this.ivanPositionBeforeSettings,
+          useNativeDriver: true,
+          duration: 1000,
+          easing:Easing.ease
+        }
+      )
+    ]).start(()=>{
+      this.setState({flyingAround:false})
+      this._float()
+    })
+  }
+
+  _stayOnScreen = () => {
+    let dim = Dimensions.get('screen')
+    if (this._ivanPositionValue.x < -20) this.ivanPosition.x.setValue(-20)
+    if (this._ivanPositionValue.y < -20) this.ivanPosition.y.setValue(-20)
+    if (this._ivanPositionValue.x > dim.width - 50) this.ivanPosition.x.setValue(dim.width - 50)
+    if (this._ivanPositionValue.y > dim.height - 70) this.ivanPosition.y.setValue(dim.height - 70)
+  }
+
+  _float() {
+    let startingPosition = this._ivanPositionValue.y
     Animated.sequence([
       Animated.timing(
         this.ivanPosition['y'],
@@ -91,12 +155,12 @@ export default class Ivan extends Component {
       )
     ]).start((o) => {
       if (o.finished) {      
-        this.float()
+        this._float()
       }
     })
   }
 
-  flap() {
+  _flap() {
     this.ivanFlap.setValue(0)
     Animated.sequence([
       Animated.timing(
@@ -119,7 +183,7 @@ export default class Ivan extends Component {
       )
     ]).start((o) => {
       if (o.finished) {      
-        this.flap()
+        this._flap()
       }
     })
   }
@@ -127,83 +191,113 @@ export default class Ivan extends Component {
 
   render() {
     const zeroToSixty = this.ivanFlap.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '60deg']
-      })
+      inputRange: [0, 1],
+      outputRange: ['0deg', '60deg']
+    })
     const zeroToNegativeSixty = this.ivanFlap.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '-60deg']
-      })
+      inputRange: [0, 1],
+      outputRange: ['0deg', '-60deg']
+    })
+    const wingY = this.ivanFlap.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-12, -16]
+    })
 
     return (
-      <Animated.View style={{height: 70, width: 65, position:'absolute', transform: this.ivanPosition.getTranslateTransform(), alignItems: 'center', justifyContent: 'center'}} {...this.panResponder.panHandlers} >
-        <Animated.Image 
-          source={Images.ivans_right_wing} 
-          style={{
-            height:40,
-            width:40,
-            position:'absolute', 
-            transform: [
-              {rotate: .1},
-              {translateX: -13}, 
-              {translateY: -15}, 
-              {rotateX: zeroToSixty}, 
-              {rotateY: zeroToSixty}
-            ] 
-          }} 
-          resizeMode='contain' />
-        <Animated.Image 
-          source={Images.ivans_left_wing} 
-          style={{
-            height:40,
-            width:40,
-            position:'absolute', 
-            transform: [
-              {rotate: -.1},
-              {translateX: 13}, 
-              {translateY: -15}, 
-              {rotateX: zeroToNegativeSixty}, 
-              {rotateY: zeroToSixty}
-            ] 
-          }} 
-          resizeMode='contain' />
-        <Animated.Image 
-          source={Images.ivans_right_foot} 
-          style={{
-            height:20,
-            width:20,
-            position:'absolute', 
-            transform: [
-              {translateX: -8}, 
-              {translateY: 10},
-              {rotateX: zeroToSixty}, 
-              {rotateY: zeroToNegativeSixty}              
-            ] 
-          }} 
-          resizeMode='contain' />
-        <Animated.Image 
-          source={Images.ivans_left_foot} 
-          style={{
-            height:20,
-            width:20,
-            position:'absolute', 
-            transform: [
-              {translateX: 8}, 
-              {translateY: 10},
-              {rotateX: zeroToNegativeSixty},
-              {rotateY: zeroToNegativeSixty}              
-            ] 
-          }} 
-          resizeMode='contain' />
-        <Animated.Image 
-          source={Images.ivans_body} 
-          style={{
-            height:30,
-            width:30,
-            position:'absolute'
-          }} 
-          resizeMode='contain' />
-
+      <Animated.View style={{
+        height: this.state.roomForExpansion ? 100 : 70, 
+        width: this.state.roomForExpansion ? 100 : 70, 
+        position:'absolute', 
+        transform: this.ivanPosition.getTranslateTransform(), 
+        alignItems: 'center', 
+        justifyContent: 'center'
+      }} {...this.panResponder.panHandlers} >
+        <TouchableWithoutFeedback onPress={this._toggleSettings.bind(this)} >
+          <View style={{
+            height: this.state.roomForExpansion ? 100 : 70, 
+            width: this.state.roomForExpansion ? 100 : 70, 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }} >
+            <Animated.Image 
+              source={Images.ivans_right_wing} 
+              style={{
+                height: 40,
+                width: 40,
+                position:'absolute', 
+                transform: [
+                  {rotate: .1},
+                  {translateX: -13}, 
+                  {translateY: wingY}, 
+                  {rotateX: zeroToSixty}, 
+                  {rotateY: zeroToSixty}
+                ],
+                opacity: this.state.wingsInvisible ? 0 : 1
+              }} 
+              resizeMode='contain' />
+            <Animated.Image 
+              source={Images.ivans_left_wing} 
+              style={{
+                height: 40,
+                width: 40,
+                position:'absolute', 
+                transform: [
+                  {rotate: -.1},
+                  {translateX: 13}, 
+                  {translateY: wingY}, 
+                  {rotateX: zeroToNegativeSixty}, 
+                  {rotateY: zeroToSixty}
+                ],
+                opacity: this.state.wingsInvisible ? 0 : 1
+              }} 
+              resizeMode='contain' />
+            <Animated.Image 
+              source={Images.ivans_right_foot} 
+              style={{
+                height: 20,
+                width: 20,
+                position:'absolute', 
+                transform: [
+                  {translateX: -8}, 
+                  {translateY: 10},
+                  {rotateX: zeroToSixty}, 
+                  {rotateY: zeroToNegativeSixty}              
+                ] 
+              }} 
+              resizeMode='contain' />
+            <Animated.Image 
+              source={Images.ivans_left_foot} 
+              style={{
+                height: 20,
+                width: 20,
+                position:'absolute', 
+                transform: [
+                  {translateX: 8}, 
+                  {translateY: 10},
+                  {rotateX: zeroToNegativeSixty},
+                  {rotateY: zeroToNegativeSixty}              
+                ] 
+              }} 
+              resizeMode='contain' />
+            <Animated.Image 
+              source={Images.ivans_body} 
+              style={{
+                height: 30,
+                width: 30,
+                position:'absolute'
+              }} 
+              resizeMode='contain' />
+            <Animated.Image 
+              source={Images.settings_burger} 
+              style={{
+                height: 10,
+                width: 10,
+                position:'absolute',
+                transform: [{scale: this.ivanBurger}]
+              }} 
+              resizeMode='contain' />
+          </View>
+        </TouchableWithoutFeedback>
       </Animated.View>
     )
   }

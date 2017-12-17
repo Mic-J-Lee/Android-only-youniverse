@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Alert, Animated, AppRegistry, Dimensions, Easing, LayoutAnimation, UIManager, View } from 'react-native'
 import Ivan from './components/Ivan/Ivan'
+import Settings from './components/Settings/Settings'
 import Cloud from './components/Cloud/Cloud'
 import Rainbow from './components/Rainbow/Rainbow'
 import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
@@ -29,11 +30,13 @@ export default class App extends Component {
       activeColor: 'red',
       cards: initialCards,
       correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
-      wrongGuesses: []
+      wrongGuesses: [],
+      status: 'ready',
+      settings: false
     }
   }
 
-  drawSixCards = () => {
+  _drawSixCards = () => {
     //access database, obtain one correct card and five dummies
     shuffledCards = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
     this.setState({
@@ -59,7 +62,7 @@ export default class App extends Component {
 
   _activateStripe(color) {
     if (this.state.rainbow[color] && this.state.activeColor != color) {
-      this.drawSixCards()
+      this._drawSixCards()
       this.setState({activeColor: color})
     }
   }
@@ -78,7 +81,7 @@ export default class App extends Component {
         nextColor++
     }
     // record success result into database
-    this.drawSixCards()
+    this._drawSixCards()
     this.setState({activeColor: colors[nextColor]})
   }
 
@@ -86,6 +89,23 @@ export default class App extends Component {
     let wrongGuessesClone = [...this.state.wrongGuesses]
     wrongGuessesClone.push(guess)
     this.setState({wrongGuesses: wrongGuessesClone})
+  }
+
+  _pause = () => {
+    this.setState({status:'paused'})
+  }
+
+  _unpause = () => {
+    this.setState({status:'ready'})
+  }
+
+  _activateSettings = () => {
+    this.setState({settings:'active'})
+  }
+
+  _deactivateSettings = () => {
+    if (this.state.settings == 'leaving') this.setState({settings:false})
+    if (this.state.settings == 'active') this.setState({settings:'leaving'})
   }
 
   render() {
@@ -111,15 +131,30 @@ export default class App extends Component {
       activeColor={this.state.activeColor}
       _nextColor={this._nextColor}
       _wrongGuess={this._wrongGuess}
-      wrongGuesses={this.state.wrongGuesses} />
+      wrongGuesses={this.state.wrongGuesses}
+      status={this.state.status} />
     )
 
     return (
-      <View style={{flex:1, flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', backgroundColor: 'powderblue'}}>
+      <View style={{
+        flex: 1, 
+        flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', 
+        backgroundColor: 'powderblue'
+      }}>
         {clouds}
         {rainbow}
         {multipleChoiceQuestion}
-        <Ivan orientation={this.state.orientation} />
+        {this.state.settings && 
+          <Settings 
+            settings={this.state.settings}
+            _deactivateSettings={this._deactivateSettings}
+            _unpause={this._unpause} />
+        }
+        <Ivan 
+          _activateSettings={this._activateSettings}
+          _deactivateSettings={this._deactivateSettings}
+          _pause={this._pause}
+          settings={this.state.settings} />
       </View>
     )
   }

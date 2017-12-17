@@ -27,13 +27,13 @@ export default class Cloud extends Component {
           useNativeDriver: true,
           deceleration: 0.997,
           velocity: { x: gestureState.vx, y: gestureState.vy }
-        }).start(() => this.float());
+        }).start(() => this._float());
       },
     })
-    this.float()
+    this._float()
   }
 
-  float() {
+  _float() {
     Animated.timing(
       this.animatedValue['x'],
       {
@@ -45,7 +45,7 @@ export default class Cloud extends Component {
     ).start((o) => {
       if (o.finished) {      
         this.animatedValue.setValue(this.cloudStartingPosition)
-        this.float()
+        this._float()
       }
     })
   }

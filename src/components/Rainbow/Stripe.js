@@ -32,10 +32,10 @@ export default class Stripe extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    !prevProps.isActive && this.props.isActive && this.spring()
+    !prevProps.isActive && this.props.isActive && this._spring()
   }
 
-  spring() {
+  _spring() {
     this.springValue.setValue(45)
     Animated.spring(
       this.springValue,

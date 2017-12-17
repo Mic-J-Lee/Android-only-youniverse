@@ -10,11 +10,11 @@ export default class Choice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this.exitScreenInTriumph(), 450)
-    this.props.status == 'animating' && !this.props.isCorrect && setTimeout(()=>this.exitScreenInDespair(), Math.random() * 300)
+    this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this._exitScreenInTriumph(), 450)
+    this.props.status == 'animating' && !this.props.isCorrect && setTimeout(()=>this._exitScreenInDespair(), Math.random() * 300)
   }
 
-  exitScreenInTriumph() {
+  _exitScreenInTriumph() {
     this.animatedValue.setValue({ x: 0, y: 0})
     Animated.timing(
       this.animatedValue,
@@ -27,7 +27,7 @@ export default class Choice extends Component {
     ).start()
   }
 
-  exitScreenInDespair() {
+  _exitScreenInDespair() {
     this.animatedValue.setValue({ x: 0, y: 0})
     Animated.timing(
       this.animatedValue,
@@ -41,10 +41,9 @@ export default class Choice extends Component {
   }
 
   _checkIfCorrect = () => {
-    if (this.props.isCorrect) {
-      this.props._nextColor()
-    } else {
-      this.props._wrongGuess(this.props.content)
+    if (this.props.status == 'ready') {
+      if (this.props.isCorrect) this.props._nextColor()
+      else this.props._wrongGuess(this.props.content)
     }
   }
 

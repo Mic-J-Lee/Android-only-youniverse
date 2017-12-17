@@ -10,12 +10,12 @@ export default class Question extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.status == 'animating' && setTimeout(()=>this.exitScreenInTriumph(), 500)
-    prevProps.status == 'animating' && this.props.status == 'ready' && this.enterScreen()
-    this.props.activeColor != prevProps.activeColor && this.enterScreen()
+    this.props.status == 'animating' && setTimeout(()=>this._exitScreenInTriumph(), 500)
+    prevProps.status == 'animating' && this.props.status == 'ready' && this._enterScreen()
+    this.props.activeColor != prevProps.activeColor && this._enterScreen()
   }
 
-  enterScreen() {
+  _enterScreen() {
     this.animatedValue.setValue({ x: 0, y: -500})
     Animated.spring(
       this.animatedValue,
@@ -27,7 +27,7 @@ export default class Question extends Component {
     ).start(()=>{this.animatedValue.setValue({ x: 0, y: 0})})
   }
 
-  exitScreenInTriumph() {
+  _exitScreenInTriumph() {
     this.animatedValue.setValue({ x: 0, y: 0})
     Animated.timing(
       this.animatedValue,
