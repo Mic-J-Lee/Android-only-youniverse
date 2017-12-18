@@ -32,7 +32,7 @@ export default class AudioButton extends Component {
   }
 
   _playSound = () => {
-    this.whoosh.play((success) => {if (!success) whoosh.reset() })
+    this.whoosh.play((success) => {if (!success) this.whoosh.reset() })
   }
 
   componentWillUnmount() {
