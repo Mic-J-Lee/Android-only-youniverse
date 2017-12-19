@@ -66,7 +66,7 @@ export default class Settings extends Component {
     let dim = Dimensions.get('screen')
     const translateX = this.stretchSideways.interpolate({
       inputRange: [0, 1],
-      outputRange: [-dim.height/2.35, 5]
+      outputRange: [-dim.width/2.35, 5]
     })
     const translateY = this.expandDown.interpolate({
       inputRange: [0, 1],
@@ -88,7 +88,7 @@ export default class Settings extends Component {
         backgroundColor: 'black',
         opacity: .90,
         position: 'absolute',
-        borderRadius: 10,
+        borderRadius: 18,
         transform: [
           {translateX: translateX},
           {translateY: translateY},

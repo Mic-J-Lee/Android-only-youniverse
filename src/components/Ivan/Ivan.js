@@ -8,7 +8,8 @@ export default class Ivan extends Component {
     this.state = ({
       flyingAround: false,
       wingsInvisible: false,
-      roomForExpansion: false
+      roomForExpansion: false,
+      cantPressMe: false
     })
   }
 
@@ -56,8 +57,10 @@ export default class Ivan extends Component {
   }
 
   _toggleSettings() {
+    this.setState({cantPressMe:true})
     if (this.state.wingsInvisible) this._deactivateSettings()
     else this._activateSettings()
+    setTimeout(()=>this.setState({cantPressMe:false}), 1500)
   }
 
   _activateSettings() {
@@ -68,13 +71,13 @@ export default class Ivan extends Component {
     this.ivanPositionBeforeSettings = this._ivanPositionValue
     this.ivanBurger.setValue(1)
     Animated.sequence([
-      Animated.spring(
+      Animated.timing(
         this.ivanBurger,
         {
           toValue: 7,
           useNativeDriver: true,
-          duration: 1000,
-
+          duration: 500,
+          easing: Easing.elastic(1)
         }
       ),
       Animated.timing(
@@ -86,7 +89,8 @@ export default class Ivan extends Component {
           easing:Easing.ease
         }
       )
-    ]).start(()=>this.props._activateSettings())
+    ]).start()
+    setTimeout(()=>this.props._activateSettings(), 750)
   }
 
   _deactivateSettings() {
@@ -106,7 +110,6 @@ export default class Ivan extends Component {
           toValue: 1,
           useNativeDriver: true,
           duration: 200,
-
         }
       ),
       Animated.timing(
@@ -212,7 +215,9 @@ export default class Ivan extends Component {
         alignItems: 'center', 
         justifyContent: 'center'
       }} {...this.panResponder.panHandlers} >
-        <TouchableWithoutFeedback onPress={this._toggleSettings.bind(this)} >
+        <TouchableWithoutFeedback 
+          onPress={this._toggleSettings.bind(this)} 
+          disabled={this.state.cantPressMe} >
           <View style={{
             height: this.state.roomForExpansion ? 100 : 70, 
             width: this.state.roomForExpansion ? 100 : 70, 

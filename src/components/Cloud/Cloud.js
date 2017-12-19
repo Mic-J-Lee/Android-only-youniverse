@@ -3,6 +3,13 @@ import { Animated, Easing, Dimensions, PanResponder, View } from 'react-native'
 import Images from '../../assets/pictures/dynamicRequire'
 
 export default class Cloud extends Component {
+  constructor() {
+    super()
+    this.state = {
+      travelTime: Math.random() * (100000 - 10000) + 10000
+    }
+  }
+
   componentWillMount() {
     this.cloudStartingPosition = {x: 600, y : Dimensions.get('screen').height * Math.random() - 100}
     this.animatedValue = new Animated.ValueXY(this.cloudStartingPosition);
@@ -12,6 +19,7 @@ export default class Cloud extends Component {
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderGrant: (e, gestureState) => {
+        this.setState({travelTime: Math.abs(this.state.travelTime / 2)})
         this.animatedValue.setOffset({
           x: this._value.x,
           y: this._value.y,
@@ -27,23 +35,24 @@ export default class Cloud extends Component {
           useNativeDriver: true,
           deceleration: 0.997,
           velocity: { x: gestureState.vx, y: gestureState.vy }
-        }).start(() => this._float());
+        }).start(() => this._float(this.state.travelTime));
       },
     })
     this._float()
   }
 
-  _float() {
+  _float(duration) {
     Animated.timing(
       this.animatedValue['x'],
       {
         toValue: -600,
         useNativeDriver: true,
-        duration: Math.random() * (100000 - 10000) + 10000,
+        duration: duration || this.state.travelTime,
         easing: Easing.linear,
       }
     ).start((o) => {
-      if (o.finished) {      
+      if (o.finished) {
+        this.setState({travelTime: Math.random() * (100000 - 10000) + 10000})
         this.animatedValue.setValue(this.cloudStartingPosition)
         this._float()
       }

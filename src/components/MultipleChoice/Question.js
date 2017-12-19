@@ -14,7 +14,7 @@ export default class Question extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.status == 'animating' && setTimeout(()=>this._exitScreenInTriumph(), 500)
+    this.props.status == 'animating' && setTimeout(()=>this._exitScreenInTriumph(), 800)
     prevProps.status == 'animating' && this.props.status == 'ready' && this._enterScreen()
     this.props.activeColor != prevProps.activeColor && this._enterScreen()
   }

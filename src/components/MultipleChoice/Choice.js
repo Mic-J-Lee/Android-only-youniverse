@@ -14,7 +14,7 @@ export default class Choice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this._exitScreenInTriumph(), 450)
+    this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this._exitScreenInTriumph(), 750)
     this.props.status == 'animating' && !this.props.isCorrect && setTimeout(()=>this._exitScreenInDespair(), Math.random() * 300)
     prevProps.status == 'animating' && this.props.status == 'ready' && this._enterScreen()
     this.props.activeColor != prevProps.activeColor && this._enterScreen()
@@ -53,7 +53,7 @@ export default class Choice extends Component {
        toValue: {x: 0, y: 400},
        useNativeDriver: true,
        duration: 500,
-       easing: Easing.cubic
+       easing: Easing.poly(5)
       }
     ).start()
   }

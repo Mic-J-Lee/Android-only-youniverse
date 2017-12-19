@@ -134,27 +134,29 @@ export default class App extends Component {
       wrongGuesses={this.state.wrongGuesses}
       status={this.state.status} />
     )
+    const settings = (<Settings 
+      settings={this.state.settings}
+      _deactivateSettings={this._deactivateSettings}
+      _unpause={this._unpause} />
+    )
+    const ivan = (<Ivan 
+      _activateSettings={this._activateSettings}
+      _deactivateSettings={this._deactivateSettings}
+      _pause={this._pause}
+      settings={this.state.settings} />
+    )
 
     return (
       <View style={{
-        flex: 1, 
-        flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', 
-        backgroundColor: 'powderblue'
-      }}>
+          flex: 1, 
+          flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', 
+          backgroundColor: 'powderblue'
+        }}>
         {clouds}
         {rainbow}
         {multipleChoiceQuestion}
-        {this.state.settings && 
-          <Settings 
-            settings={this.state.settings}
-            _deactivateSettings={this._deactivateSettings}
-            _unpause={this._unpause} />
-        }
-        <Ivan 
-          _activateSettings={this._activateSettings}
-          _deactivateSettings={this._deactivateSettings}
-          _pause={this._pause}
-          settings={this.state.settings} />
+        {this.state.settings && settings}
+        {ivan}
       </View>
     )
   }
