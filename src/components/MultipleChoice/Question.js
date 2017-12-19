@@ -9,6 +9,10 @@ export default class Question extends Component {
     this.animatedValue = new Animated.ValueXY()
   }
 
+  componentDidMount() {
+    this._enterScreen()
+  }
+
   componentDidUpdate(prevProps) {
     this.props.status == 'animating' && setTimeout(()=>this._exitScreenInTriumph(), 500)
     prevProps.status == 'animating' && this.props.status == 'ready' && this._enterScreen()

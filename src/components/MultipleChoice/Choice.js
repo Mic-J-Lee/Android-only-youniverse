@@ -9,9 +9,27 @@ export default class Choice extends Component {
     this.animatedValue = new Animated.ValueXY()
   }
 
+  componentDidMount() {
+    this._enterScreen()
+  }
+
   componentDidUpdate(prevProps) {
     this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this._exitScreenInTriumph(), 450)
     this.props.status == 'animating' && !this.props.isCorrect && setTimeout(()=>this._exitScreenInDespair(), Math.random() * 300)
+    prevProps.status == 'animating' && this.props.status == 'ready' && this._enterScreen()
+    this.props.activeColor != prevProps.activeColor && this._enterScreen()
+  }
+
+  _enterScreen() {
+    this.animatedValue.setValue({ x: 0, y: -500})
+    Animated.spring(
+      this.animatedValue,
+      { 
+        toValue: {x: 0, y: 0},
+        useNativeDriver: true,
+        duration: 500,
+      }
+    ).start(()=>{this.animatedValue.setValue({ x: 0, y: 0})})
   }
 
   _exitScreenInTriumph() {
@@ -19,7 +37,7 @@ export default class Choice extends Component {
     Animated.timing(
       this.animatedValue,
       { 
-       toValue: {x: -500, y: 0},
+       toValue: {x: -600, y: 0},
        useNativeDriver: true,
        duration: 500,
        easing: Easing.cubic
@@ -32,7 +50,7 @@ export default class Choice extends Component {
     Animated.timing(
       this.animatedValue,
       { 
-       toValue: {x: 0, y: 300},
+       toValue: {x: 0, y: 400},
        useNativeDriver: true,
        duration: 500,
        easing: Easing.cubic

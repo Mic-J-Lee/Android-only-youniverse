@@ -10,7 +10,7 @@ export default class Stripe extends Component {
   }
 
   componentWillMount() {
-    this.springValue = new Animated.Value(50)
+    this.springValue = new Animated.Value(1)
     this.panResponder = PanResponder.create({
       onMoveShouldSetPanResponder:(evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -36,11 +36,12 @@ export default class Stripe extends Component {
   }
 
   _spring() {
-    this.springValue.setValue(45)
+    this.springValue.setValue(.8)
     Animated.spring(
       this.springValue,
       {
-        toValue: 50,
+        useNativeDriver:true,
+        toValue: 1,
         friction: 1,
         tension: 1.5
       }
@@ -50,12 +51,19 @@ export default class Stripe extends Component {
   render() {
     const portrait = this.props.orientation == 'portrait'
     return (
-      <View style={{flex: 1}}  {...this.panResponder.panHandlers}>
+      <View style={{flex: 1, flexDirection: portrait ? 'column' : 'row' }} {...this.panResponder.panHandlers}>
+        <View style={{flex: 1, backgroundColor: this.props.color}} />
+        <View style={{flex: 1}} />
+        <View style={{flex: 1}} />
         <Animated.View style={{
+          position: 'absolute',
           flexDirection: portrait ? 'column' : 'row',
-          height: portrait ? this.springValue : 43, 
-          width: portrait ? 45 : this.springValue}}>
-
+          height: portrait ? 50 : 43, 
+          width: portrait ? 45 : 50,
+          transform: [
+            {scaleX: portrait ? 1 : this.springValue},
+            {scaleY: portrait ? this.springValue : 1}
+          ] }}>
              <View style={{flex: 4, backgroundColor: this.props.color}} />
           {!this.props.isActive && <View style={{flex: 1}} />}
           {!this.props.isEnabled && <View style={{flex: 1}} />}
