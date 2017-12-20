@@ -30,12 +30,12 @@ export default class Ivan extends Component {
         this.ivanPosition.setValue({ x: 0, y: 0})
         this.setState({flyingAround: true})
         setTimeout(()=>this._flap(), 0)
-        this.getBackHere = setInterval(()=>this._stayOnScreen(), 1)
       },
       onPanResponderMove: Animated.event([
         null, { dx: this.ivanPosition.x, dy: this.ivanPosition.y}
       ]),
       onPanResponderRelease: (e, gestureState) => {
+        this.getBackHere = setInterval(()=>this._stayOnScreen(), 1)
         this.ivanPosition.flattenOffset()
         Animated.decay(this.ivanPosition, {
           useNativeDriver: true,
@@ -56,19 +56,19 @@ export default class Ivan extends Component {
     !this.state.roomForExpansion && this._stayOnScreen()
   }
 
-  _toggleSettings() {
+  _toggleMenu() {
     this.setState({cantPressMe:true})
-    if (this.state.wingsInvisible) this._deactivateSettings()
-    else this._activateSettings()
+    if (this.state.wingsInvisible) this._deactivateMenu()
+    else this._activateMenu()
     setTimeout(()=>this.setState({cantPressMe:false}), 1500)
   }
 
-  _activateSettings() {
+  _activateMenu() {
     this.props._pause()
     this.setState({roomForExpansion:true})
     this.ivanPosition.setOffset({x: -15, y: -15})
     setTimeout(()=>this.setState({wingsInvisible:true}), 280)
-    this.ivanPositionBeforeSettings = this._ivanPositionValue
+    this.ivanPositionBeforeMenu = this._ivanPositionValue
     this.ivanBurger.setValue(1)
     Animated.sequence([
       Animated.timing(
@@ -90,11 +90,11 @@ export default class Ivan extends Component {
         }
       )
     ]).start()
-    setTimeout(()=>this.props._activateSettings(), 750)
+    setTimeout(()=>this.props._activateMenu(), 750)
   }
 
-  _deactivateSettings() {
-    this.props._deactivateSettings()
+  _deactivateMenu() {
+    this.props._deactivateMenu()
     this.ivanPosition.setValue({x:15,y:15})
     this.ivanPosition.flattenOffset()
     this.setState({roomForExpansion:false})
@@ -102,6 +102,7 @@ export default class Ivan extends Component {
       wingsInvisible: false,
       flyingAround: true
     })
+    setTimeout(()=>this._flap(), 700)
     this.ivanBurger.setValue(7)
     Animated.sequence([
       Animated.spring(
@@ -115,7 +116,7 @@ export default class Ivan extends Component {
       Animated.timing(
         this.ivanPosition,
         {
-          toValue: this.ivanPositionBeforeSettings,
+          toValue: this.ivanPositionBeforeMenu,
           useNativeDriver: true,
           duration: 1000,
           easing:Easing.ease
@@ -143,7 +144,7 @@ export default class Ivan extends Component {
         {
           toValue: startingPosition + 10,
           useNativeDriver: true,
-          duration: this.state.flyingAround ? 35 : 1000,
+          duration: 1000,
           easing: Easing.ease,
         }
       ),
@@ -152,7 +153,7 @@ export default class Ivan extends Component {
         {
           toValue: startingPosition,
           useNativeDriver: true,
-          duration: this.state.flyingAround ? 35 : 1000,
+          duration: 1000,
           easing: Easing.ease,
         }
       )
@@ -170,7 +171,7 @@ export default class Ivan extends Component {
         this.ivanFlap,
         {
           toValue: 1,
-          duration: this.state.flyingAround ? 35 : 1000,
+          duration: this.state.flyingAround ? 50 : 1000,
           easing: Easing.ease,
           useNativeDriver: true
         }
@@ -179,7 +180,7 @@ export default class Ivan extends Component {
         this.ivanFlap,
         {
           toValue: 0,
-          duration: this.state.flyingAround ? 35 : 1000,
+          duration: this.state.flyingAround ? 50 : 1000,
           easing: Easing.linear,
           useNativeDriver: true
         }
@@ -216,7 +217,7 @@ export default class Ivan extends Component {
         justifyContent: 'center'
       }} {...this.panResponder.panHandlers} >
         <TouchableWithoutFeedback 
-          onPress={this._toggleSettings.bind(this)} 
+          onPress={this._toggleMenu.bind(this)} 
           disabled={this.state.cantPressMe} >
           <View style={{
             height: this.state.roomForExpansion ? 100 : 70, 
@@ -293,7 +294,7 @@ export default class Ivan extends Component {
               }} 
               resizeMode='contain' />
             <Animated.Image 
-              source={Images.settings_burger} 
+              source={Images.menu_burger} 
               style={{
                 height: 10,
                 width: 10,

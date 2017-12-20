@@ -25,13 +25,12 @@ export default class MultipleChoiceQuestion extends Component {
   _getQuestion = () => {
     const type = modes[this.props.activeColor]['question']
     const content = this.props.correctCard[type]
-    return (
-        <Question 
-          status={this.state.status}
-          content={content} 
-          activeColor={this.props.activeColor}
-          type={type}
-          _readyToSwitch={this.props._nextColor} />
+    return (<Question 
+      status={this.state.status}
+      content={content} 
+      activeColor={this.props.activeColor}
+      type={type}
+      _readyToSwitch={this.props._nextColor} />
     )
   }
   
@@ -43,17 +42,16 @@ export default class MultipleChoiceQuestion extends Component {
     let output = []
     for (let i = 0; i < choices.length; i++) {
       let isCorrect = choices[i] == correct
-      output.push(
-          <Choice
-            key={choices[i]} 
-            status={this.state.status}
-            type={type} 
-            content={choices[i]}
-            isCorrect={isCorrect} 
-            _nextColor={this.success}
-            _wrongGuess={this.props._wrongGuess}
-            wrongGuesses={this.props.wrongGuesses}
-            activeColor={this.props.activeColor} />
+      output.push(<Choice
+        key={choices[i]} 
+        status={this.state.status}
+        type={type} 
+        content={choices[i]}
+        isCorrect={isCorrect} 
+        _nextColor={this.success}
+        _wrongGuess={this.props._wrongGuess}
+        wrongGuesses={this.props.wrongGuesses}
+        activeColor={this.props.activeColor} />
       )
     }
     return output
@@ -78,7 +76,7 @@ export default class MultipleChoiceQuestion extends Component {
           {_displayQuestion(question)}
           {_displayMultipleChoices(choices, isPortrait)}
         </View>
-        <View style={[{flex: 1}]} />
+        <View style={{flex: 1}} />
       </View>
     )
   }

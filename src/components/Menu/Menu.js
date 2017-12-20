@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Animated, Dimensions, PanResponder, Text, TouchableWithoutFeedback, View } from 'react-native'
 
-export default class Settings extends Component {
+export default class Menu extends Component {
   componentWillMount() {
     this.stretchSideways = new Animated.Value(0)
     this.expandDown = new Animated.Value(0)
@@ -12,7 +12,7 @@ export default class Settings extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    newProps.settings == 'leaving' && this._leave()
+    newProps.menu == 'leaving' && this._leave()
   }
 
   _enter() {
@@ -57,7 +57,7 @@ export default class Settings extends Component {
         }
       )
     ]).start(()=>{
-      this.props._deactivateSettings()
+      this.props._deactivateMenu()
       this.props._unpause()
     })
   }
@@ -97,7 +97,7 @@ export default class Settings extends Component {
         ],
         alignItems: 'center'
       }}>
-        <Text style={{color: 'white', fontSize: 30}} >Settings</Text>
+        <Text style={{color: 'white', fontSize: 30}} >Menu</Text>
 
       </Animated.View>
     )

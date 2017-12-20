@@ -85,8 +85,7 @@ export default class Choice extends Component {
           size='small' 
           isCorrect={this.props.isCorrect} 
           _checkIfCorrect={this._checkIfCorrect}
-          disabled={this.props.wrongGuesses.includes(content)} 
-          style={{transform: this.animatedValue.getTranslateTransform()}} />
+          disabled={this.props.wrongGuesses.includes(content)} />
       </Animated.View>
     )
 

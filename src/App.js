@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Alert, Animated, AppRegistry, Dimensions, Easing, LayoutAnimation, UIManager, View } from 'react-native'
+import { Alert, AppRegistry, Dimensions, LayoutAnimation, UIManager, View } from 'react-native'
 import Ivan from './components/Ivan/Ivan'
-import Settings from './components/Settings/Settings'
+import Menu from './components/Menu/Menu'
 import Cloud from './components/Cloud/Cloud'
 import Rainbow from './components/Rainbow/Rainbow'
 import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
@@ -32,7 +32,7 @@ export default class App extends Component {
       correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
       wrongGuesses: [],
       status: 'ready',
-      settings: false
+      menu: false
     }
   }
 
@@ -99,13 +99,13 @@ export default class App extends Component {
     this.setState({status:'ready'})
   }
 
-  _activateSettings = () => {
-    this.setState({settings:'active'})
+  _activateMenu = () => {
+    this.setState({menu:'active'})
   }
 
-  _deactivateSettings = () => {
-    if (this.state.settings == 'leaving') this.setState({settings:false})
-    if (this.state.settings == 'active') this.setState({settings:'leaving'})
+  _deactivateMenu = () => {
+    if (this.state.menu == 'leaving') this.setState({menu:false})
+    if (this.state.menu == 'active') this.setState({menu:'leaving'})
   }
 
   render() {
@@ -134,16 +134,16 @@ export default class App extends Component {
       wrongGuesses={this.state.wrongGuesses}
       status={this.state.status} />
     )
-    const settings = (<Settings 
-      settings={this.state.settings}
-      _deactivateSettings={this._deactivateSettings}
+    const menu = (<Menu 
+      menu={this.state.menu}
+      _deactivateMenu={this._deactivateMenu}
       _unpause={this._unpause} />
     )
     const ivan = (<Ivan 
-      _activateSettings={this._activateSettings}
-      _deactivateSettings={this._deactivateSettings}
+      _activateMenu={this._activateMenu}
+      _deactivateMenu={this._deactivateMenu}
       _pause={this._pause}
-      settings={this.state.settings} />
+      menu={this.state.menu} />
     )
 
     return (
@@ -155,7 +155,7 @@ export default class App extends Component {
         {clouds}
         {rainbow}
         {multipleChoiceQuestion}
-        {this.state.settings && settings}
+        {this.state.menu && menu}
         {ivan}
       </View>
     )
