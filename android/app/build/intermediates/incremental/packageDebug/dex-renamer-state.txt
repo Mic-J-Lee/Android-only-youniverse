@@ -1,4 +1,4 @@
-#Tue Dec 12 16:15:29 EST 2017
-base.0=/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
+#Fri Dec 22 22:00:55 PST 2017
+base.0=/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
 renamed.0=classes.dex
-file.0=/Users/michaellee/Desktop/test/YouNiVerse/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
+file.0=/Users/michaellee/Desktop/YouNiVerse/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
