@@ -171,7 +171,7 @@ export default class Ivan extends Component {
         this.ivanFlap,
         {
           toValue: 1,
-          duration: this.state.flyingAround ? 50 : 1000,
+          duration: this.state.flyingAround ? 45 : 1000,
           easing: Easing.ease,
           useNativeDriver: true
         }
@@ -180,7 +180,7 @@ export default class Ivan extends Component {
         this.ivanFlap,
         {
           toValue: 0,
-          duration: this.state.flyingAround ? 50 : 1000,
+          duration: this.state.flyingAround ? 45 : 1000,
           easing: Easing.linear,
           useNativeDriver: true
         }
@@ -204,7 +204,7 @@ export default class Ivan extends Component {
     })
     const wingY = this.ivanFlap.interpolate({
       inputRange: [0, 1],
-      outputRange: [-12, -16]
+      outputRange: [-8, -14]
     })
 
     return (
@@ -228,12 +228,12 @@ export default class Ivan extends Component {
             <Animated.Image 
               source={Images.ivans_right_wing} 
               style={{
-                height: 40,
-                width: 40,
+                height: 38,
+                width: 38,
                 position:'absolute', 
                 transform: [
                   {rotate: .1},
-                  {translateX: -13}, 
+                  {translateX: -9}, 
                   {translateY: wingY}, 
                   {rotateX: zeroToSixty}, 
                   {rotateY: zeroToSixty}
@@ -244,12 +244,12 @@ export default class Ivan extends Component {
             <Animated.Image 
               source={Images.ivans_left_wing} 
               style={{
-                height: 40,
-                width: 40,
+                height: 38,
+                width: 38,
                 position:'absolute', 
                 transform: [
                   {rotate: -.1},
-                  {translateX: 13}, 
+                  {translateX: 9}, 
                   {translateY: wingY}, 
                   {rotateX: zeroToNegativeSixty}, 
                   {rotateY: zeroToSixty}
@@ -261,11 +261,11 @@ export default class Ivan extends Component {
               source={Images.ivans_right_foot} 
               style={{
                 height: 20,
-                width: 20,
+                width: 15,
                 position:'absolute', 
                 transform: [
-                  {translateX: -8}, 
-                  {translateY: 10},
+                  {translateX: -6}, 
+                  {translateY: 5},
                   {rotateX: zeroToSixty}, 
                   {rotateY: zeroToNegativeSixty}              
                 ] 
@@ -275,11 +275,11 @@ export default class Ivan extends Component {
               source={Images.ivans_left_foot} 
               style={{
                 height: 20,
-                width: 20,
+                width: 15,
                 position:'absolute', 
                 transform: [
-                  {translateX: 8}, 
-                  {translateY: 10},
+                  {translateX: 6}, 
+                  {translateY: 5},
                   {rotateX: zeroToNegativeSixty},
                   {rotateY: zeroToNegativeSixty}              
                 ] 
