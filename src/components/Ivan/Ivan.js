@@ -288,8 +288,8 @@ export default class Ivan extends Component {
             <Animated.Image 
               source={Images.ivans_body} 
               style={{
-                height: 30,
-                width: 30,
+                height: 28,
+                width: 28,
                 position:'absolute'
               }} 
               resizeMode='contain' />
