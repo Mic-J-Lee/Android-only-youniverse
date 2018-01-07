@@ -31,6 +31,10 @@ export function _displayMultipleChoices(multipleChoicesArray, isPortrait = true)
   )
 }
 
+export function _shuffleThisArray(array) {
+  return array.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
+}
+
 export const modes = {
   red: {question: 'audio', answers: 'picture'},
   orange: {question: 'writing', answers: 'audio'},
@@ -39,8 +43,3 @@ export const modes = {
   blue: {question: 'audio', answers: 'writing'},
   purple: {question: 'picture', answers: 'audio'}
 }
-
-export function _shuffleThisArray(array) {
-  return array.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
-}
-

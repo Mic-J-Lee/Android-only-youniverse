@@ -4,7 +4,7 @@ import AudioButton from './AudioButton'
 import PictureButton from './PictureButton'
 import { _loadSoundObject } from './helpers'
 
-export default class Choice extends Component {
+export default class Question extends Component {
   componentWillMount() {
     this.animatedValue = new Animated.ValueXY()
   }
@@ -14,9 +14,8 @@ export default class Choice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.props.status == 'animating' && this.props.isCorrect && setTimeout(()=>this._exitScreenInTriumph(), 750)
-    this.props.status == 'animating' && !this.props.isCorrect && setTimeout(()=>this._exitScreenInDespair(), Math.random() * 300)
-    prevProps.status == 'animating' && this.props.status == 'ready' && this._enterScreen()
+    this.props.status == 'starting success animation' && setTimeout(()=>this._exitScreenInTriumph(), 800)
+    prevProps.status == 'animating success' && this.props.status == 'ready' && this._enterScreen()
     this.props.activeColor != prevProps.activeColor && this._enterScreen()
   }
 
@@ -37,55 +36,31 @@ export default class Choice extends Component {
     Animated.timing(
       this.animatedValue,
       { 
-       toValue: {x: -600, y: 0},
+       toValue: {x: -500, y: 0},
        useNativeDriver: true,
-       duration: 500,
+       duration: 300,
        easing: Easing.cubic
       }
-    ).start()
-  }
-
-  _exitScreenInDespair() {
-    this.animatedValue.setValue({ x: 0, y: 0})
-    Animated.timing(
-      this.animatedValue,
-      { 
-       toValue: {x: 0, y: 400},
-       useNativeDriver: true,
-       duration: 500,
-       easing: Easing.poly(5)
-      }
-    ).start()
-  }
-
-  _checkIfCorrect = () => {
-    if (this.props.status == 'ready') {
-      if (this.props.isCorrect) this.props._nextColor()
-      else this.props._wrongGuess(this.props.content)
-    }
+    ).start(()=>this.props._readyToSwitch())
   }
 
   render() {
     const content = this.props.content
+    const file = this.props.file
     const audioButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
-        <AudioButton 
+        <AudioButton
           sound={content} 
-          size='small' 
-          isCorrect={this.props.isCorrect} 
-          _checkIfCorrect={this._checkIfCorrect}
-          disabled={this.props.wrongGuesses.includes(content)} />
+          file={file}
+          size='large' />
       </Animated.View>
     )
     const pictureButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
-        <PictureButton
-          status={this.props.status} 
+        <PictureButton 
           picture={content}
-          size='small' 
-          isCorrect={this.props.isCorrect} 
-          _checkIfCorrect={this._checkIfCorrect}
-          disabled={this.props.wrongGuesses.includes(content)} />
+          file={file}
+          size='large' />
       </Animated.View>
     )
 

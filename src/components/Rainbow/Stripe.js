@@ -20,11 +20,11 @@ export default class Stripe extends Component {
       onPanResponderRelease: (evt, gestureState) => {
         const dyOrDx = this.props.orientation == 'portrait' ? 'dy' : 'dx'
         if (gestureState[dyOrDx] < -5 && this.props.isEnabled) {
-          this.props._toggleStripe(this.props.identity)
+          this.props._toggleStripe(this.props.color)
         } else if (gestureState[dyOrDx] > 5 && !this.props.isEnabled) {
-          this.props._toggleStripe(this.props.identity)
+          this.props._toggleStripe(this.props.color)
         } else if (this.props.isEnabled) {
-          this.props._activateStripe(this.props.identity)
+          this.props._activateStripe(this.props.color)
         } 
         this.setState({touched:false})
       }
@@ -52,7 +52,7 @@ export default class Stripe extends Component {
     const portrait = this.props.orientation == 'portrait'
     return (
       <View style={{flex: 1, flexDirection: portrait ? 'column' : 'row' }} {...this.panResponder.panHandlers}>
-        <View style={{flex: 1, backgroundColor: this.props.color}} />
+        <View style={{flex: 1, backgroundColor: this.props.displayedColor}} />
         <View style={{flex: 1}} />
         <View style={{flex: 1}} />
         <Animated.View style={{
@@ -64,7 +64,7 @@ export default class Stripe extends Component {
             {scaleX: portrait ? 1 : this.springValue},
             {scaleY: portrait ? this.springValue : 1}
           ] }}>
-             <View style={{flex: 4, backgroundColor: this.props.color}} />
+             <View style={{flex: 4, backgroundColor: this.props.displayedColor}} />
           {!this.props.isActive && <View style={{flex: 1}} />}
           {!this.props.isEnabled && <View style={{flex: 1}} />}
         </Animated.View>

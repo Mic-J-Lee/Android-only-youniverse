@@ -4,7 +4,7 @@ import Ivan from './components/Ivan/Ivan'
 import Menu from './components/Menu/Menu'
 import Cloud from './components/Cloud/Cloud'
 import Rainbow from './components/Rainbow/Rainbow'
-import MultipleChoiceQuestion from './components/MultipleChoice/MultipleChoiceQuestion'
+import Flashcard from './components/Flashcard/Flashcard'
 
 export default class App extends Component {
   constructor() {
@@ -28,22 +28,15 @@ export default class App extends Component {
         purple: true
       },
       activeColor: 'red',
-      cards: initialCards,
-      correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
-      wrongGuesses: [],
       status: 'ready',
       menu: false
     }
   }
 
-  _drawSixCards = () => {
-    //access database, obtain one correct card and five dummies
-    shuffledCards = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
-    this.setState({
-      cards: shuffledCards,
-      correctCard: shuffledCards[Math.floor(Math.random()*shuffledCards.length)],
-      wrongGuesses: []
-    })
+  _activateStripe(color) {
+    if (this.state.rainbow[color] && this.state.activeColor != color) {
+      this.setState({activeColor: color})
+    }
   }
 
   _toggleStripe(color) {
@@ -60,11 +53,21 @@ export default class App extends Component {
     }
   }
 
-  _activateStripe(color) {
-    if (this.state.rainbow[color] && this.state.activeColor != color) {
-      this._drawSixCards()
-      this.setState({activeColor: color})
-    }
+  _pause = () => {
+    this.setState({status:'paused'})
+  }
+
+  _unpause = () => {
+    this.setState({status:'ready'})
+  }
+
+  _enterMenu = () => {
+    this.setState({menu:'active'})
+  }
+
+  _exitMenu = () => {
+    if (this.state.menu == 'leaving') this.setState({menu:false})
+    if (this.state.menu == 'active') this.setState({menu:'leaving'})
   }
 
   _nextColor = () => {
@@ -80,32 +83,7 @@ export default class App extends Component {
       else
         nextColor++
     }
-    // record success result into database
-    this._drawSixCards()
     this.setState({activeColor: colors[nextColor]})
-  }
-
-  _wrongGuess = (guess) => {
-    let wrongGuessesClone = [...this.state.wrongGuesses]
-    wrongGuessesClone.push(guess)
-    this.setState({wrongGuesses: wrongGuessesClone})
-  }
-
-  _pause = () => {
-    this.setState({status:'paused'})
-  }
-
-  _unpause = () => {
-    this.setState({status:'ready'})
-  }
-
-  _activateMenu = () => {
-    this.setState({menu:'active'})
-  }
-
-  _deactivateMenu = () => {
-    if (this.state.menu == 'leaving') this.setState({menu:false})
-    if (this.state.menu == 'active') this.setState({menu:'leaving'})
   }
 
   render() {
@@ -123,7 +101,7 @@ export default class App extends Component {
       _activateStripe={this._activateStripe.bind(this)} 
       orientation={this.state.orientation} />
     )
-    const multipleChoiceQuestion = (<MultipleChoiceQuestion
+    const flashcard = (<Flashcard
       cards={this.state.cards}
       rainbow={this.state.rainbow}
       orientation={this.state.orientation}
@@ -136,12 +114,12 @@ export default class App extends Component {
     )
     const menu = (<Menu 
       menu={this.state.menu}
-      _deactivateMenu={this._deactivateMenu}
+      _exitMenu={this._exitMenu}
       _unpause={this._unpause} />
     )
     const ivan = (<Ivan 
-      _activateMenu={this._activateMenu}
-      _deactivateMenu={this._deactivateMenu}
+      _enterMenu={this._enterMenu}
+      _exitMenu={this._exitMenu}
       _pause={this._pause}
       menu={this.state.menu} />
     )
@@ -154,45 +132,12 @@ export default class App extends Component {
         }}>
         {clouds}
         {rainbow}
-        {multipleChoiceQuestion}
+        {flashcard}
         {this.state.menu && menu}
         {ivan}
       </View>
     )
   }
 }
-
-const initialCards = [
-  {
-    audio: 'jat1',
-    picture: 'english1',
-    writing: 'chinese1'
-  },
-  {
-    audio: 'ji6',
-    picture: 'english2',
-    writing: 'chinese2'
-  },
-  {
-    audio: 'saam1',
-    picture: 'english3',
-    writing: 'chinese3'
-  },
-  {
-    audio: 'sei3',
-    picture: 'english4',
-    writing: 'chinese4'
-  },
-  {
-    audio: 'ng5',
-    picture: 'english5',
-    writing: 'chinese5'
-  },
-  {
-    audio: 'luk6',
-    picture: 'english6',
-    writing: 'chinese6'
-  }
-]
 
 AppRegistry.registerComponent('YouNiVerse', () => App)

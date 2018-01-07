@@ -19,8 +19,8 @@ export default class Rainbow extends Component {
       let isEnabled = this.props.rainbow[color]
       allStripes.push(
         <Stripe key={color} 
-                identity={color}
-                color={isEnabled == true ? color : fadedColor} 
+                color={color}
+                displayedColor={isEnabled == true ? color : fadedColor} 
                 isActive={this.props.activeColor == color}
                 isEnabled={isEnabled}
                 _toggleStripe={this.props._toggleStripe}
