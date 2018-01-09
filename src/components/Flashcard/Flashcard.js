@@ -3,8 +3,6 @@ import { Animated, Easing, View } from 'react-native'
 import Choice from './Choice'
 import Question from './Question'
 import { _displayMultipleChoices, modes } from './helpers'
-import Sound from 'react-native-sound'
-import Images from '../../assets/pictures/dynamicRequire'
 import { styles } from './styleModule'
 
 export default class Flashcard extends Component {
@@ -16,10 +14,6 @@ export default class Flashcard extends Component {
       cards: initialCards,
       correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
     }
-  }
-
-  componentWillMount(){
-
   }
 
   componentWillReceiveProps(newProps){
@@ -41,20 +35,6 @@ export default class Flashcard extends Component {
   _drawSixCards = () => {
     //access database, obtain one correct card and five dummies
     shuffledCards = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
-    for (card of shuffledCards) {
-      for (format in card) {
-        switch (format) {
-          case 'audio':
-            card.audioFile = new Sound('cantonese' + '_' + card.audio + '.mp3', Sound.MAIN_BUNDLE)
-            break
-          case 'picture':
-            card.pictureFile = Images[card.picture]
-            break
-          case 'writing':
-            card.writingFile = Images[card.writing]
-        }
-      }
-    }  
     this.setState({
       cards: shuffledCards,
       correctCard: shuffledCards[Math.floor(Math.random()*shuffledCards.length)],
@@ -65,37 +45,28 @@ export default class Flashcard extends Component {
   _getQuestion = () => {
     const type = modes[this.props.activeColor]['question']
     const content = this.state.correctCard[type]
-    const file = this.state.correctCard[type + 'File']
     return (<Question 
-      type={type}
-      content={content} 
-      file={file}
       status={this.state.status}
+      content={content} 
       activeColor={this.props.activeColor}
+      type={type}
       _readyToSwitch={this.props._nextColor} />
     )
   }
   
-  _loadCardData = (cards = [...this.state.cards]) => {
-
-  }
-
   _getchoices = () => {
     const type = modes[this.props.activeColor]['answers']
     const correct = this.state.correctCard[type]
     let choices = []
-    this.state.cards.forEach(function(card){
-      choices.push([card[type], card[type + 'File']])
-    })
+    this.state.cards.forEach(function(card){choices.push(card[type])})
     let output = []
     for (let i = 0; i < choices.length; i++) {
-      let isCorrect = choices[i][0] == correct
+      let isCorrect = choices[i] == correct
       output.push(<Choice
         key={choices[i]} 
         status={this.state.status}
         type={type} 
-        content={choices[i][0]}
-        file={choices[i][1]}
+        content={choices[i]}
         isCorrect={isCorrect} 
         _nextColor={this._success}
         _wrongGuess={this._wrongGuess}

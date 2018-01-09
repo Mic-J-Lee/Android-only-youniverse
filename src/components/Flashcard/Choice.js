@@ -72,12 +72,10 @@ export default class Choice extends Component {
 
   render() {
     const content = this.props.content
-    const file = this.props.file
     const audioButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
         <AudioButton 
           sound={content} 
-          file={file}
           size='small' 
           isCorrect={this.props.isCorrect} 
           _checkIfCorrect={this._checkIfCorrect}
@@ -89,7 +87,6 @@ export default class Choice extends Component {
         <PictureButton
           status={this.props.status} 
           picture={content}
-          file={file}
           size='small' 
           isCorrect={this.props.isCorrect} 
           _checkIfCorrect={this._checkIfCorrect}

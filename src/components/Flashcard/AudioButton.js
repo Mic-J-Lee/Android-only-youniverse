@@ -5,12 +5,12 @@ import Sound from 'react-native-sound'
 
 
 export default class AudioButton extends Component {
-  componentWillMount() {
+  componentWillMount(language = 'cantonese') {
     this.spinValue = new Animated.Value(0)
+    setTimeout(()=>this.whoosh = new Sound(language + '_' + this.props.sound + '.mp3', Sound.MAIN_BUNDLE),300)
   }
 
   componentDidMount() {
-    setTimeout(()=>this.whoosh = new Sound('cantonese' + '_' + this.props.sound + '.mp3', Sound.MAIN_BUNDLE),800)
     this._spin()
   }
 

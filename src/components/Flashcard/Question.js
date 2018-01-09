@@ -46,20 +46,17 @@ export default class Question extends Component {
 
   render() {
     const content = this.props.content
-    const file = this.props.file
     const audioButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
-        <AudioButton
+        <AudioButton 
           sound={content} 
-          file={file}
           size='large' />
       </Animated.View>
     )
     const pictureButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
         <PictureButton 
-          picture={content}
-          file={file}
+          picture={content} 
           size='large' />
       </Animated.View>
     )
