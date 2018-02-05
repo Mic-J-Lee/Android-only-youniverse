@@ -43,29 +43,29 @@ export default class Flashcard extends Component {
   }
 
   _getQuestion = () => {
-    const type = modes[this.props.activeColor]['question']
-    const content = this.state.correctCard[type]
+    const medium = modes[this.props.activeColor]['question']
+    const content = this.state.correctCard[medium]
     return (<Question 
       status={this.state.status}
       content={content} 
       activeColor={this.props.activeColor}
-      type={type}
+      medium={medium}
       _readyToSwitch={this.props._nextColor} />
     )
   }
   
   _getchoices = () => {
-    const type = modes[this.props.activeColor]['answers']
-    const correct = this.state.correctCard[type]
+    const medium = modes[this.props.activeColor]['answers']
+    const correct = this.state.correctCard[medium]
     let choices = []
-    this.state.cards.forEach(function(card){choices.push(card[type])})
+    this.state.cards.forEach(function(card){choices.push(card[medium])})
     let output = []
     for (let i = 0; i < choices.length; i++) {
       let isCorrect = choices[i] == correct
       output.push(<Choice
         key={choices[i]} 
         status={this.state.status}
-        type={type} 
+        medium={medium}
         content={choices[i]}
         isCorrect={isCorrect} 
         _nextColor={this._success}

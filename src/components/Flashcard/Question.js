@@ -62,7 +62,7 @@ export default class Question extends Component {
     )
 
     return (
-      this.props.type == 'audio' ? audioButton : pictureButton
+      this.props.medium == 'audio' ? audioButton : pictureButton
     )
   }
 }
