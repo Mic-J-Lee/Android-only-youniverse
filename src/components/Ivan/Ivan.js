@@ -227,7 +227,6 @@ export default class Ivan extends Component {
       )
     }
     const viewSize = this.state.roomForExpansion ? 100 : 70
-
     return (
       <Animated.View style={{
         height: viewSize, 
@@ -257,13 +256,11 @@ export default class Ivan extends Component {
                 height: 10,
                 width: 10,
                 position:'absolute',
-                transform: [{scale: this.burgerSize}]
-              }} 
+                transform: [{scale: this.burgerSize}] }}
               resizeMode='contain' />
           </View>
         </TouchableWithoutFeedback>
       </Animated.View>
-
     )
   }
 }

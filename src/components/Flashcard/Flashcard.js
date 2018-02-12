@@ -12,7 +12,6 @@ export default class Flashcard extends Component {
       status: 'ready',
       wrongGuesses: [],
       cards: initialCards,
-      correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
     }
   }
 
@@ -37,14 +36,13 @@ export default class Flashcard extends Component {
     shuffledCards = initialCards.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1])
     this.setState({
       cards: shuffledCards,
-      correctCard: shuffledCards[Math.floor(Math.random()*shuffledCards.length)],
       wrongGuesses: []
     })
   }
 
   _getQuestion = () => {
     const medium = modes[this.props.activeColor]['question']
-    const content = this.state.correctCard[medium]
+    const content = this.state.cards[0][medium]
     return (<Question 
       status={this.state.status}
       content={content} 
@@ -56,7 +54,7 @@ export default class Flashcard extends Component {
   
   _getchoices = () => {
     const medium = modes[this.props.activeColor]['answers']
-    const correct = this.state.correctCard[medium]
+    const correct = this.state.cards[0][medium]
     let choices = []
     this.state.cards.forEach(function(card){choices.push(card[medium])})
     let output = []

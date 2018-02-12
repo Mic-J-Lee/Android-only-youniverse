@@ -42,7 +42,7 @@ export default class Menu extends Component {
 
   render() {
     let dim = Dimensions.get('screen')
-    const translateX = this.expandDown.interpolate({
+    const translateX = this.expandDown.interpolate({ //testing
       inputRange: [0, .5, 1],
       outputRange: [-dim.width/2.38, 5, 5]
     })
@@ -62,7 +62,6 @@ export default class Menu extends Component {
       inputRange: [0, .5, 1],
       outputRange: [0, .85, .93]
     })
-
     return (
       <Animated.View style={{
         height: dim.height - 30, 
@@ -77,10 +76,8 @@ export default class Menu extends Component {
           {scaleX: scaleX},
           {scaleY: scaleY},
         ],
-        alignItems: 'center'
-      }}>
+        alignItems: 'center' }}>
         <Text style={{color: 'white', fontSize: 30}} >Menu</Text>
-
       </Animated.View>
     )
   }
