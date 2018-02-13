@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Animated, Easing, Dimensions, PanResponder, TouchableWithoutFeedback, View } from 'react-native'
 import Images from '../../assets/pictures/dynamicRequire'
+import SpeechBubble from './SpeechBubble'
 
 export default class Ivan extends Component {
   constructor() {
@@ -9,7 +10,8 @@ export default class Ivan extends Component {
       flyingAround: false,
       wingsInvisible: false,
       roomForExpansion: false,
-      cantPressMe: false
+      cantPressMe: false,
+      ivanSays: false
     })
   }
 
@@ -192,6 +194,16 @@ export default class Ivan extends Component {
     })
   }
 
+  _speechBubbleDimensions(layout){
+    const {x, y, width, height} = layout;
+    this._bubbleSize = {
+      x: x,
+      y: y,
+      width: width,
+      height: height
+    }
+  }
+
 
   render() {
     const zeroToSixty = this.ivanFlap.interpolate({
@@ -208,7 +220,7 @@ export default class Ivan extends Component {
     })
     const bodyPart = (imageSource, height, width, rotate, translateX, translateY, rotateX, rotateY) => {
       return (
-        <Animated.Image 
+        <Animated.Image
           source={Images[imageSource]} 
           style={{
             height: height,
@@ -227,40 +239,57 @@ export default class Ivan extends Component {
       )
     }
     const viewSize = this.state.roomForExpansion ? 100 : 70
+    let dim = Dimensions.get('screen')
     return (
-      <Animated.View style={{
-        height: viewSize, 
-        width: viewSize, 
-        position:'absolute', 
-        transform: this.ivanPosition.getTranslateTransform(), 
-        alignItems: 'center', 
-        justifyContent: 'center'
-      }} {...this.panResponder.panHandlers} >
-        <TouchableWithoutFeedback 
-          onPress={this._toggleMenu.bind(this)} 
-          disabled={this.state.cantPressMe} >
-          <View style={{
-            height: viewSize, 
-            width: viewSize, 
-            alignItems: 'center', 
-            justifyContent: 'center'
-          }} >
-            {bodyPart('ivans_right_wing', 38, 38, .1, -9, wingY, zeroToSixty, zeroToSixty)}
-            {bodyPart('ivans_left_wing', 38, 38, -.1, 9, wingY, zeroToNegativeSixty, zeroToSixty)}
-            {bodyPart('ivans_right_foot', 20, 15, 0, -6, 5, zeroToSixty, zeroToNegativeSixty)}
-            {bodyPart('ivans_left_foot', 20, 15, 0, 6, 5, zeroToNegativeSixty, zeroToNegativeSixty)}
-            {bodyPart('ivans_body', 28, 28, 0, 0, 0, 0, 0)}
-            <Animated.Image 
-              source={Images.menu_burger} 
-              style={{
-                height: 10,
-                width: 10,
-                position:'absolute',
-                transform: [{scale: this.burgerSize}] }}
-              resizeMode='contain' />
-          </View>
-        </TouchableWithoutFeedback>
-      </Animated.View>
+      <View style={{height: dim.height, width: dim.width, position: 'absolute'}} >
+        <Animated.View
+          style={{
+            transform: this.ivanPosition.getTranslateTransform(),
+            alignSelf: 'flex-start',
+            bottom: this.ivanPositionValue.y < dim.height/2 - 40 ? null : this._bubbleSize.height,
+            top: this.ivanPositionValue.y < dim.height/2 - 40 ? 50 : null,
+            left: this.ivanPositionValue.x < dim.width/2 - 35 ? null : 20-this._bubbleSize.width,
+            right: this.ivanPositionValue.x < dim.width/2 - 35 ? -45 : null,
+          }}
+          onLayout={(event) => {
+            this._speechBubbleDimensions(event.nativeEvent.layout)
+          }}>
+          {this.state.ivanSays && <SpeechBubble width={dim.width} ivanSays={this.state.ivanSays} />}
+        </Animated.View>
+        <Animated.View style={{
+          height: viewSize,
+          width: viewSize,
+          transform: this.ivanPosition.getTranslateTransform(),
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'absolute'
+          }} {...this.panResponder.panHandlers} >
+          <TouchableWithoutFeedback
+            onPress={this._toggleMenu.bind(this)}
+            disabled={this.state.cantPressMe} >
+            <View style={{
+              height: viewSize,
+              width: viewSize,
+              alignItems: 'center',
+              justifyContent: 'center',
+              }} >
+              {bodyPart('ivans_right_wing', 38, 38, .1, -9, wingY, zeroToSixty, zeroToSixty)}
+              {bodyPart('ivans_left_wing', 38, 38, -.1, 9, wingY, zeroToNegativeSixty, zeroToSixty)}
+              {bodyPart('ivans_right_foot', 20, 15, 0, -6, 5, zeroToSixty, zeroToNegativeSixty)}
+              {bodyPart('ivans_left_foot', 20, 15, 0, 6, 5, zeroToNegativeSixty, zeroToNegativeSixty)}
+              {bodyPart('ivans_body', 28, 28, 0, 0, 0, 0, 0)}
+              <Animated.Image
+                source={Images.menu_burger}
+                style={{
+                  height: 10,
+                  width: 10,
+                  position:'absolute',
+                  transform: [{scale: this.burgerSize}] }}
+                resizeMode='contain' />
+            </View>
+          </TouchableWithoutFeedback>
+        </Animated.View>
+      </View>
     )
   }
 }

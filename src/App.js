@@ -19,6 +19,7 @@ export default class App extends Component {
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     this.state = {
       orientation: dim.height > dim.width ? 'portrait' : 'landscape',
+      dimensions: dim,
       rainbow: {
         red: true,
         orange: true,
@@ -121,13 +122,14 @@ export default class App extends Component {
       _enterMenu={this._enterMenu}
       _exitMenu={this._exitMenu}
       _pause={this._pause}
+      dimensions={this.state.dimensions}
       menu={this.state.menu} />
     )
 
     return (
       <View style={{
-          flex: 1, 
-          flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column', 
+          flex: 1,
+          flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column',
           backgroundColor: 'powderblue'
         }}>
         {clouds}
