@@ -5,20 +5,25 @@ import Sound from 'react-native-sound'
 
 
 export default class AudioButton extends Component {
-  componentWillMount(language = 'cantonese') {
+  componentWillMount() {
     this.spinValue = new Animated.Value(0)
-    setTimeout(()=>this.whoosh = new Sound(
-      language + '_' + this.props.sound + '.mp3',
+    setTimeout(()=> this._loadSound(), Math.random() * (500 - 100) + 100)
+  }
+
+  _loadSound(language = 'cantonese') {
+    this.fileName = language + '_' + this.props.sound + '.mp3'
+    this.whoosh = new Sound(
+      this.fileName,
       Sound.MAIN_BUNDLE,
       (error) => {
         if (error) {
-          console.log('failed to load ' + language + '_' + this.props.sound + '.mp3', error)
+          console.log('failed to load ' + this.fileName, error)
           return
         }
-        console.log('loaded sound; duration in seconds: ' + this.whoosh.getDuration() + 'number of channels: ' + this.whoosh.getNumberOfChannels())
+        console.log('loaded ' + this.fileName + ', seconds: ' + this.whoosh.getDuration() + ', channels:' + this.whoosh.getNumberOfChannels())
         this._spin()
       }
-    ),Math.random() * (500 - 50) + 50)
+    )
     // this.whoosh = new Sound(language + '_' + this.props.sound + '.mp3', Sound.MAIN_BUNDLE)
   }
 
@@ -44,7 +49,14 @@ export default class AudioButton extends Component {
       if (this.whoosh._filename.split('_')[this.whoosh._filename.split('_').length - 1] != this.props.sound) {
         Alert.alert("ERROR: Sound doesn't match file!!! Hold down sound button to see actual sound")
       }
-      this.whoosh.play((success) => {if (!success) this.whoosh.reset() })
+      this.whoosh.play((success) => {
+        if (!success) {
+          this.whoosh.reset()
+          console.log('couldnt play ' + this.whoosh._filename)
+        }
+      })
+    } else {
+      console.log('there is no this.whoosh!')
     }
   }
 

@@ -277,7 +277,7 @@ export default class Ivan extends Component {
               {bodyPart('ivans_left_wing', 38, 38, -.1, 9, wingY, zeroToNegativeSixty, zeroToSixty)}
               {bodyPart('ivans_right_foot', 20, 15, 0, -6, 5, zeroToSixty, zeroToNegativeSixty)}
               {bodyPart('ivans_left_foot', 20, 15, 0, 6, 5, zeroToNegativeSixty, zeroToNegativeSixty)}
-              {bodyPart('ivans_body', 28, 28, 0, 0, 0, 0, 0)}
+              {bodyPart('ivans_body', 28, 28, '0deg', 0, 0, '0deg', '0deg')}
               <Animated.Image
                 source={Images.menu_burger}
                 style={{
