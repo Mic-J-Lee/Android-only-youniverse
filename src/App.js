@@ -15,19 +15,16 @@ export default class App extends Component {
     let dim = Dimensions.get('screen')
     Dimensions.addEventListener('change', () => {
       dim = Dimensions.get('screen')
-      this.setState({
-          orientation: dim.height > dim.width ? 'portrait' : 'landscape'
-      })
+      this.setState({dimensions:dim})
     })
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     this.state = {
-      realm: null,
-      orientation: dim.height > dim.width ? 'portrait' : 'landscape',
-      dimensions: dim,
-      rainbow: {},
-      activeColor: 'red',
-      status: 'ready',
-      menu: false
+      realm:        null,
+      dimensions:   dim,
+      rainbow:      {},
+      activeColor:  'red',
+      status:       'ready',
+      menu:         false
     }
   }
 
@@ -52,6 +49,7 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
           purple: realm.objects('Game')[0].purple
         }
       })
+      if (!this.state.rainbow[this.state.activeColor]) this._nextColor()
     })
   }
 
@@ -100,33 +98,35 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
 
   _nextColor = () => {
     const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
-    currentColor = colors.indexOf(this.state.activeColor)
-    currentColor == 5 ? nextColor = 0 : nextColor = currentColor + 1
-    nextColorIsFound = false
+    const current = colors.indexOf(this.state.activeColor)
+    let next = 0
+    if (current != 5) next = current + 1
+    let nextColorIsFound = false
     while (nextColorIsFound == false) {
-      if (this.state.rainbow[colors[nextColor]] == true)
+      if (this.state.rainbow[colors[next]] == true)
         nextColorIsFound = true
-      else if (nextColor == 5)
-        nextColor = 0
+      else if (next == 5)
+        next = 0
       else
-        nextColor++
+        next++
     }
-    this.setState({activeColor: colors[nextColor]})
+    this.setState({activeColor: colors[next]})
   }
 
   render() {
     let info = ('game.introStatus = ' + (this.state.realm && this.state.realm.objects('Game')[0].introStatus))
+    let orientation = (this.state.dimensions.height > this.state.dimensions.width ? 'portrait' : 'landscape')
     const rainbow = (<Rainbow
       activeColor={this.state.activeColor}
       rainbow={this.state.rainbow}
       _toggleStripe={this._toggleStripe.bind(this)}
       _activateStripe={this._activateStripe.bind(this)}
-      orientation={this.state.orientation} />
+      orientation={orientation} />
     )
     const flashcard = (<Flashcard
       cards={this.state.cards}
       rainbow={this.state.rainbow}
-      orientation={this.state.orientation}
+      orientation={orientation}
       correctCard={this.state.correctCard}
       activeColor={this.state.activeColor}
       _nextColor={this._nextColor}
@@ -151,7 +151,7 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
     return (
       <View style={{
           flex: 1,
-          flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column',
+          flexDirection: orientation == 'landscape' ? 'row' : 'column',
           backgroundColor: 'powderblue'
         }}>
         <Clouds />
