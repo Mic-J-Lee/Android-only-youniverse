@@ -19,6 +19,12 @@ export const GameSchema = {
   name: 'Game',
   properties: {
     user: 'User?',
-    introStatus: {type: 'string', default: 'not started'}
+    introStatus: {type: 'string', default: 'not started'},
+    red: {type: 'bool', default: true},
+    orange: {type: 'bool', default: true},
+    yellow: {type: 'bool', default: true},
+    green: {type: 'bool', default: true},
+    blue: {type: 'bool', default: true},
+    purple: {type: 'bool', default: true}
   }
 }

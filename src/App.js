@@ -24,14 +24,7 @@ export default class App extends Component {
       realm: null,
       orientation: dim.height > dim.width ? 'portrait' : 'landscape',
       dimensions: dim,
-      rainbow: {
-        red: true,
-        orange: true,
-        yellow: true,
-        green: true,
-        blue: true,
-        purple: true
-      },
+      rainbow: {},
       activeColor: 'red',
       status: 'ready',
       menu: false
@@ -40,21 +33,25 @@ export default class App extends Component {
 
   componentWillMount() {
     Realm.open({
-      //MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
-      deleteRealmIfMigrationNeeded: true, //MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
-      //MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
+deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
       schema: [ UserSchema, GameSchema ]
     }).then(realm => {
       realm.write(() => {
         !realm.objects('Game')[0] && realm.create('Game', {})
-        // realm.create('Dog', {name: 'Rex'})
-        // realm.create('User', {name: 'Mike'})
         // users = realm.objects('User')
-        // dogs = realm.objects('Dog')
         // for (let user of users) realm.delete(user)
-        // for (let dog of dogs) realm.delete(dog)
       })
       this.setState({ realm })
+      this.setState({
+        rainbow: {
+          red: realm.objects('Game')[0].red,
+          orange: realm.objects('Game')[0].orange,
+          yellow: realm.objects('Game')[0].yellow,
+          green: realm.objects('Game')[0].green,
+          blue: realm.objects('Game')[0].blue,
+          purple: realm.objects('Game')[0].purple
+        }
+      })
     })
   }
 
@@ -72,9 +69,15 @@ export default class App extends Component {
     else if (color == this.state.activeColor) {
       this._nextColor()
       this.setState({rainbow: rainbowClone})
+      this.state.realm.write(()=>{
+        this.state.realm.objects('Game')[0][color] = rainbowClone[color]
+      })
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
       this.setState({rainbow: rainbowClone})
+      this.state.realm.write(()=>{
+        this.state.realm.objects('Game')[0][color] = rainbowClone[color]
+      })
     }
   }
 
@@ -112,7 +115,7 @@ export default class App extends Component {
   }
 
   render() {
-    // Alert.alert('game.introStatus = ' + (this.state.realm && this.state.realm.objects('Game')[0].introStatus))
+    let info = ('game.introStatus = ' + (this.state.realm && this.state.realm.objects('Game')[0].introStatus))
     const rainbow = (<Rainbow
       activeColor={this.state.activeColor}
       rainbow={this.state.rainbow}
