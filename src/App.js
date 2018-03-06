@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import { Alert, AppRegistry, Dimensions, LayoutAnimation, UIManager, View } from 'react-native'
+import { Alert, AppRegistry, Dimensions, LayoutAnimation, UIManager, View, Text } from 'react-native'
 import Ivan from './components/Ivan/Ivan'
 import Menu from './components/Menu/Menu'
-import Cloud from './components/Cloud/Cloud'
+import Clouds from './components/Clouds/Clouds'
 import Rainbow from './components/Rainbow/Rainbow'
 import Flashcard from './components/Flashcard/Flashcard'
+import { UserSchema, GameSchema } from './Schema'
+
+const Realm = require('realm')
 
 export default class App extends Component {
   constructor() {
@@ -18,6 +21,7 @@ export default class App extends Component {
     })
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     this.state = {
+      realm: null,
       orientation: dim.height > dim.width ? 'portrait' : 'landscape',
       dimensions: dim,
       rainbow: {
@@ -32,6 +36,26 @@ export default class App extends Component {
       status: 'ready',
       menu: false
     }
+  }
+
+  componentWillMount() {
+    Realm.open({
+      //MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
+      deleteRealmIfMigrationNeeded: true, //MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
+      //MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
+      schema: [ UserSchema, GameSchema ]
+    }).then(realm => {
+      realm.write(() => {
+        !realm.objects('Game')[0] && realm.create('Game', {})
+        // realm.create('Dog', {name: 'Rex'})
+        // realm.create('User', {name: 'Mike'})
+        // users = realm.objects('User')
+        // dogs = realm.objects('Dog')
+        // for (let user of users) realm.delete(user)
+        // for (let dog of dogs) realm.delete(dog)
+      })
+      this.setState({ realm })
+    })
   }
 
   _activateStripe(color) {
@@ -77,8 +101,8 @@ export default class App extends Component {
     currentColor == 5 ? nextColor = 0 : nextColor = currentColor + 1
     nextColorIsFound = false
     while (nextColorIsFound == false) {
-      if (this.state.rainbow[colors[nextColor]] == true) 
-        nextColorIsFound = true 
+      if (this.state.rainbow[colors[nextColor]] == true)
+        nextColorIsFound = true
       else if (nextColor == 5)
         nextColor = 0
       else
@@ -88,18 +112,12 @@ export default class App extends Component {
   }
 
   render() {
-    const clouds = (
-      <View>
-        <Cloud image={'cloud1'} size={120} />
-        <Cloud image={'cloud2'} size={130} />
-        <Cloud image={'cloud3'} size={230} />
-      </View>
-    )
-    const rainbow = (<Rainbow 
-      activeColor={this.state.activeColor} 
-      rainbow={this.state.rainbow} 
-      _toggleStripe={this._toggleStripe.bind(this)} 
-      _activateStripe={this._activateStripe.bind(this)} 
+    // Alert.alert('game.introStatus = ' + (this.state.realm && this.state.realm.objects('Game')[0].introStatus))
+    const rainbow = (<Rainbow
+      activeColor={this.state.activeColor}
+      rainbow={this.state.rainbow}
+      _toggleStripe={this._toggleStripe.bind(this)}
+      _activateStripe={this._activateStripe.bind(this)}
       orientation={this.state.orientation} />
     )
     const flashcard = (<Flashcard
@@ -113,12 +131,13 @@ export default class App extends Component {
       wrongGuesses={this.state.wrongGuesses}
       status={this.state.status} />
     )
-    const menu = (<Menu 
+    const menu = (<Menu
       menu={this.state.menu}
       _exitMenu={this._exitMenu}
       _unpause={this._unpause} />
     )
-    const ivan = (<Ivan 
+    const ivan = (<Ivan
+      realm={this.state.realm}
       _enterMenu={this._enterMenu}
       _exitMenu={this._exitMenu}
       _pause={this._pause}
@@ -132,7 +151,7 @@ export default class App extends Component {
           flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column',
           backgroundColor: 'powderblue'
         }}>
-        {clouds}
+        <Clouds />
         {rainbow}
         {flashcard}
         {this.state.menu && menu}

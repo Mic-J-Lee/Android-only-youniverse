@@ -240,6 +240,8 @@ export default class Ivan extends Component {
     }
     const viewSize = this.state.roomForExpansion ? 100 : 70
     let dim = Dimensions.get('screen')
+    let realm = this.props.realm
+    realm && (this.state.ivanSays = realm.objects('Game')[0].introStatus)
     return (
       <View style={{height: dim.height, width: dim.width, position: 'absolute'}} >
         <Animated.View
@@ -248,7 +250,7 @@ export default class Ivan extends Component {
             alignSelf: 'flex-start',
             bottom: this.ivanPositionValue.y < dim.height/2 - 40 ? null : this._bubbleSize.height,
             top: this.ivanPositionValue.y < dim.height/2 - 40 ? 50 : null,
-            left: this.ivanPositionValue.x < dim.width/2 - 35 ? null : 20-this._bubbleSize.width,
+            left: this.ivanPositionValue.x < dim.width/2 - 35 ? null : 20 - this._bubbleSize.width,
             right: this.ivanPositionValue.x < dim.width/2 - 35 ? -45 : null,
           }}
           onLayout={(event) => {
