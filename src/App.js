@@ -19,12 +19,12 @@ export default class App extends Component {
     })
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     this.state = {
-      realm:        null,
-      dimensions:   dim,
-      rainbow:      {},
-      activeColor:  'red',
-      status:       'ready',
-      menu:         false
+      realm:       null,
+      dimensions:  dim,
+      rainbow:     {},
+      activeColor: 'red',
+      status:      'ready',
+      menu:        false
     }
   }
 
@@ -41,11 +41,11 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
       this.setState({ realm })
       this.setState({
         rainbow: {
-          red: realm.objects('Game')[0].red,
+          red:    realm.objects('Game')[0].red,
           orange: realm.objects('Game')[0].orange,
           yellow: realm.objects('Game')[0].yellow,
-          green: realm.objects('Game')[0].green,
-          blue: realm.objects('Game')[0].blue,
+          green:  realm.objects('Game')[0].green,
+          blue:   realm.objects('Game')[0].blue,
           purple: realm.objects('Game')[0].purple
         }
       })
@@ -54,12 +54,14 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
   }
 
   _activateStripe(color) {
+    if (this.state.status == 'paused') return
     if (this.state.rainbow[color] && this.state.activeColor != color) {
       this.setState({activeColor: color})
     }
   }
 
   _toggleStripe(color) {
+    if (this.state.status == 'paused') return
     let rainbowClone = {...this.state.rainbow}
     rainbowClone[color] = !rainbowClone[color]
     if (!Object.values(rainbowClone).includes(true))
