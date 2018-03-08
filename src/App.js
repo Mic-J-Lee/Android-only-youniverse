@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import { Alert, AppRegistry, Dimensions, LayoutAnimation, UIManager, View } from 'react-native'
+import { Alert, AppRegistry, Dimensions, LayoutAnimation, UIManager, View, Text } from 'react-native'
 import Ivan from './components/Ivan/Ivan'
 import Menu from './components/Menu/Menu'
-import Cloud from './components/Cloud/Cloud'
+import Clouds from './components/Clouds/Clouds'
 import Rainbow from './components/Rainbow/Rainbow'
 import Flashcard from './components/Flashcard/Flashcard'
+import { UserSchema, GameSchema } from './Schema'
+
+const Realm = require('realm')
 
 export default class App extends Component {
   constructor() {
@@ -12,35 +15,53 @@ export default class App extends Component {
     let dim = Dimensions.get('screen')
     Dimensions.addEventListener('change', () => {
       dim = Dimensions.get('screen')
-      this.setState({
-          orientation: dim.height > dim.width ? 'portrait' : 'landscape'
-      })
+      this.setState({dimensions:dim})
     })
     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
     this.state = {
-      orientation: dim.height > dim.width ? 'portrait' : 'landscape',
-      dimensions: dim,
-      rainbow: {
-        red: true,
-        orange: true,
-        yellow: true,
-        green: true,
-        blue: true,
-        purple: true
-      },
+      realm:       null,
+      dimensions:  dim,
+      rainbow:     {},
       activeColor: 'red',
-      status: 'ready',
-      menu: false
+      status:      'ready',
+      menu:        false
     }
   }
 
+  componentWillMount() {
+    Realm.open({
+deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
+      schema: [ UserSchema, GameSchema ]
+    }).then(realm => {
+      realm.write(() => {
+        !realm.objects('Game')[0] && realm.create('Game', {})
+        // users = realm.objects('User')
+        // for (let user of users) realm.delete(user)
+      })
+      this.setState({ realm })
+      this.setState({
+        rainbow: {
+          red:    realm.objects('Game')[0].red,
+          orange: realm.objects('Game')[0].orange,
+          yellow: realm.objects('Game')[0].yellow,
+          green:  realm.objects('Game')[0].green,
+          blue:   realm.objects('Game')[0].blue,
+          purple: realm.objects('Game')[0].purple
+        }
+      })
+      if (!this.state.rainbow[this.state.activeColor]) this._nextColor()
+    })
+  }
+
   _activateStripe(color) {
+    if (this.state.status == 'paused') return
     if (this.state.rainbow[color] && this.state.activeColor != color) {
       this.setState({activeColor: color})
     }
   }
 
   _toggleStripe(color) {
+    if (this.state.status == 'paused') return
     let rainbowClone = {...this.state.rainbow}
     rainbowClone[color] = !rainbowClone[color]
     if (!Object.values(rainbowClone).includes(true))
@@ -48,9 +69,15 @@ export default class App extends Component {
     else if (color == this.state.activeColor) {
       this._nextColor()
       this.setState({rainbow: rainbowClone})
+      this.state.realm.write(()=>{
+        this.state.realm.objects('Game')[0][color] = rainbowClone[color]
+      })
     } else {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
       this.setState({rainbow: rainbowClone})
+      this.state.realm.write(()=>{
+        this.state.realm.objects('Game')[0][color] = rainbowClone[color]
+      })
     }
   }
 
@@ -73,39 +100,35 @@ export default class App extends Component {
 
   _nextColor = () => {
     const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
-    currentColor = colors.indexOf(this.state.activeColor)
-    currentColor == 5 ? nextColor = 0 : nextColor = currentColor + 1
-    nextColorIsFound = false
+    const current = colors.indexOf(this.state.activeColor)
+    let next = 0
+    if (current != 5) next = current + 1
+    let nextColorIsFound = false
     while (nextColorIsFound == false) {
-      if (this.state.rainbow[colors[nextColor]] == true) 
-        nextColorIsFound = true 
-      else if (nextColor == 5)
-        nextColor = 0
+      if (this.state.rainbow[colors[next]] == true)
+        nextColorIsFound = true
+      else if (next == 5)
+        next = 0
       else
-        nextColor++
+        next++
     }
-    this.setState({activeColor: colors[nextColor]})
+    this.setState({activeColor: colors[next]})
   }
 
   render() {
-    const clouds = (
-      <View>
-        <Cloud image={'cloud1'} size={120} />
-        <Cloud image={'cloud2'} size={130} />
-        <Cloud image={'cloud3'} size={230} />
-      </View>
-    )
-    const rainbow = (<Rainbow 
-      activeColor={this.state.activeColor} 
-      rainbow={this.state.rainbow} 
-      _toggleStripe={this._toggleStripe.bind(this)} 
-      _activateStripe={this._activateStripe.bind(this)} 
-      orientation={this.state.orientation} />
+    let info = ('game.introStatus = ' + (this.state.realm && this.state.realm.objects('Game')[0].introStatus))
+    let orientation = (this.state.dimensions.height > this.state.dimensions.width ? 'portrait' : 'landscape')
+    const rainbow = (<Rainbow
+      activeColor={this.state.activeColor}
+      rainbow={this.state.rainbow}
+      _toggleStripe={this._toggleStripe.bind(this)}
+      _activateStripe={this._activateStripe.bind(this)}
+      orientation={orientation} />
     )
     const flashcard = (<Flashcard
       cards={this.state.cards}
       rainbow={this.state.rainbow}
-      orientation={this.state.orientation}
+      orientation={orientation}
       correctCard={this.state.correctCard}
       activeColor={this.state.activeColor}
       _nextColor={this._nextColor}
@@ -113,12 +136,13 @@ export default class App extends Component {
       wrongGuesses={this.state.wrongGuesses}
       status={this.state.status} />
     )
-    const menu = (<Menu 
+    const menu = (<Menu
       menu={this.state.menu}
       _exitMenu={this._exitMenu}
       _unpause={this._unpause} />
     )
-    const ivan = (<Ivan 
+    const ivan = (<Ivan
+      realm={this.state.realm}
       _enterMenu={this._enterMenu}
       _exitMenu={this._exitMenu}
       _pause={this._pause}
@@ -129,10 +153,10 @@ export default class App extends Component {
     return (
       <View style={{
           flex: 1,
-          flexDirection: this.state.orientation == 'landscape' ? 'row' : 'column',
+          flexDirection: orientation == 'landscape' ? 'row' : 'column',
           backgroundColor: 'powderblue'
         }}>
-        {clouds}
+        <Clouds />
         {rainbow}
         {flashcard}
         {this.state.menu && menu}
