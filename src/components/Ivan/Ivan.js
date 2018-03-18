@@ -4,15 +4,13 @@ import Images from '../../assets/pictures/dynamicRequire'
 import SpeechBubble from './SpeechBubble'
 
 export default class Ivan extends Component {
-  constructor() {
-    super()
-    this.state = ({
-      flyingAround: false,
-      wingsInvisible: false,
-      roomForExpansion: false,
-      cantPressMe: false,
-      ivanSays: false
-    })
+
+  state = {
+    flyingAround: false,
+    wingsInvisible: false,
+    roomForExpansion: false,
+    cantPressMe: false,
+    ivanSays: false
   }
 
   componentWillMount() {

@@ -3,32 +3,31 @@ import { Alert, AppRegistry, Dimensions, LayoutAnimation, UIManager, View, Text 
 import Ivan from './components/Ivan/Ivan'
 import Menu from './components/Menu/Menu'
 import Clouds from './components/Clouds/Clouds'
-import Rainbow from './components/Rainbow/Rainbow'
-import Flashcard from './components/Flashcard/Flashcard'
+import Rainbow from './components/RainbowCards/Rainbow/Rainbow'
+import RainbowCards from './components/RainbowCards/RainbowCards'
+import Flashcard from './components/RainbowCards/Flashcard/Flashcard'
 import { UserSchema, GameSchema } from './Schema'
 
 const Realm = require('realm')
 
 export default class App extends Component {
-  constructor() {
-    super()
-    let dim = Dimensions.get('screen')
-    Dimensions.addEventListener('change', () => {
-      dim = Dimensions.get('screen')
-      this.setState({dimensions:dim})
-    })
-    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
-    this.state = {
-      realm:       null,
-      dimensions:  dim,
-      rainbow:     {},
-      activeColor: 'red',
-      status:      'ready',
-      menu:        false
-    }
+
+  state = {
+    realm:       null,
+    rainbow:     {},
+    activeColor: 'red',
+    status:      'ready',
+    menu:        false,
+    dimensions:  {}
   }
 
   componentWillMount() {
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
+    let dimensions = Dimensions.get('screen')
+    Dimensions.addEventListener('change', () => {
+      dimensions = Dimensions.get('screen')
+      this.setState({ dimensions })
+    })
     Realm.open({
 deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTION!!!!!!!!!
       schema: [ UserSchema, GameSchema ]
@@ -38,7 +37,7 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
         // users = realm.objects('User')
         // for (let user of users) realm.delete(user)
       })
-      this.setState({ realm })
+      this.setState({ realm, dimensions })
       this.setState({
         rainbow: {
           red:    realm.objects('Game')[0].red,
@@ -118,36 +117,31 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
   render() {
     let info = ('game.introStatus = ' + (this.state.realm && this.state.realm.objects('Game')[0].introStatus))
     let orientation = (this.state.dimensions.height > this.state.dimensions.width ? 'portrait' : 'landscape')
-    const rainbow = (<Rainbow
-      activeColor={this.state.activeColor}
-      rainbow={this.state.rainbow}
-      _toggleStripe={this._toggleStripe.bind(this)}
+    const rainbowCards = (<RainbowCards
       _activateStripe={this._activateStripe.bind(this)}
-      orientation={orientation} />
-    )
-    const flashcard = (<Flashcard
-      cards={this.state.cards}
-      rainbow={this.state.rainbow}
-      orientation={orientation}
-      correctCard={this.state.correctCard}
-      activeColor={this.state.activeColor}
       _nextColor={this._nextColor}
+      _toggleStripe={this._toggleStripe.bind(this)}
       _wrongGuess={this._wrongGuess}
-      wrongGuesses={this.state.wrongGuesses}
-      status={this.state.status} />
+      activeColor={this.state.activeColor}
+      cards={this.state.cards}
+      correctCard={this.state.correctCard}
+      orientation={orientation}
+      rainbow={this.state.rainbow}
+      status={this.state.status}
+      wrongGuesses={this.state.wrongGuesses} />
     )
     const menu = (<Menu
-      menu={this.state.menu}
       _exitMenu={this._exitMenu}
-      _unpause={this._unpause} />
+      _unpause={this._unpause}
+      menu={this.state.menu} />
     )
     const ivan = (<Ivan
-      realm={this.state.realm}
       _enterMenu={this._enterMenu}
       _exitMenu={this._exitMenu}
       _pause={this._pause}
       dimensions={this.state.dimensions}
-      menu={this.state.menu} />
+      menu={this.state.menu}
+      realm={this.state.realm} />
     )
 
     return (
@@ -157,8 +151,7 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
           backgroundColor: 'powderblue'
         }}>
         <Clouds />
-        {rainbow}
-        {flashcard}
+        {rainbowCards}
         {this.state.menu && menu}
         {ivan}
       </View>

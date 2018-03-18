@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Images from '../../assets/pictures/dynamicRequire'
+import Images from '../../../assets/pictures/dynamicRequire'
 import { styles } from './styleModule'
 
 export default class PictureButton extends Component {
@@ -14,7 +14,7 @@ export default class PictureButton extends Component {
         <View style={{justifyContent: 'center', alignItems: 'center'}} >
           <Image source={Images[this.props.picture]}
                  style={[styles[this.props.size + 'RoundedSquare'], {opacity: disabled ? .5 : 1}]} />
-          {disabled && <Image source={require('../../assets/pictures/red_x.png')} style={styles.redX} />}
+          {disabled && <Image source={require('../../../assets/pictures/red_x.png')} style={styles.redX} />}
         </View>
       </TouchableOpacity>
     )

@@ -6,14 +6,12 @@ import { _displayMultipleChoices, modes } from './helpers'
 import { styles } from './styleModule'
 
 export default class Flashcard extends Component {
-  constructor() {
-    super()
-    this.state = {
-      status: 'ready',
-      wrongGuesses: [],
-      cards: initialCards,
-      correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
-    }
+
+  state = {
+    status: 'ready',
+    wrongGuesses: [],
+    cards: initialCards,
+    correctCard: initialCards[Math.floor(Math.random()*initialCards.length)],
   }
 
   componentWillReceiveProps(newProps){

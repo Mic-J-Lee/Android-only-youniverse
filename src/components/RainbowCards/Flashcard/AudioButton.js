@@ -78,8 +78,8 @@ export default class AudioButton extends Component {
         <Animated.Image 
           style={[styles[this.props.size + 'Circle'], {transform: [{rotate: spin}], opacity: this.props.disabled ? .5 : 1} ]}
           resizeMode='contain'
-          source={require('../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png')} />
-        {this.props.disabled && <Image source={require('../../assets/pictures/red_x.png')} style={styles.redX} />} 
+          source={require('../../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png')} />
+        {this.props.disabled && <Image source={require('../../../assets/pictures/red_x.png')} style={styles.redX} />} 
       </TouchableOpacity>
     )
   }
