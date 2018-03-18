@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 import { Animated, PanResponder, TouchableWithoutFeedback, View } from 'react-native'
 
 export default class Stripe extends Component {
-  constructor() {
-    super()
-    this.state = {
-      touched: false
-    }
+
+  state = {
+    touched: false
   }
 
   componentWillMount() {
@@ -58,7 +56,7 @@ export default class Stripe extends Component {
         <Animated.View style={{
           position: 'absolute',
           flexDirection: portrait ? 'column' : 'row',
-          height: portrait ? 50 : 43, 
+          height: portrait ? 50 : 43,
           width: portrait ? 45 : 50,
           transform: [
             {scaleX: portrait ? 1 : this.springValue},

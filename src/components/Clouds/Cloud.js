@@ -3,11 +3,9 @@ import { Animated, Easing, Dimensions, PanResponder, View } from 'react-native'
 import Images from '../../assets/pictures/dynamicRequire'
 
 export default class Cloud extends Component {
-  constructor() {
-    super()
-    this.state = {
-      travelTime: Math.random() * (100000 - 10000) + 10000
-    }
+
+  state = {
+    travelTime: Math.random() * (100000 - 10000) + 10000
   }
 
   componentWillMount() {
