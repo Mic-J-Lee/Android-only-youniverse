@@ -121,14 +121,10 @@ deleteRealmIfMigrationNeeded: true, //        MUST REMOVE THIS LINE IN PRODUCTIO
       _activateStripe={this._activateStripe.bind(this)}
       _nextColor={this._nextColor}
       _toggleStripe={this._toggleStripe.bind(this)}
-      _wrongGuess={this._wrongGuess}
       activeColor={this.state.activeColor}
-      cards={this.state.cards}
-      correctCard={this.state.correctCard}
       orientation={orientation}
       rainbow={this.state.rainbow}
-      status={this.state.status}
-      wrongGuesses={this.state.wrongGuesses} />
+      status={this.state.status} />
     )
     const menu = (<Menu
       _exitMenu={this._exitMenu}
