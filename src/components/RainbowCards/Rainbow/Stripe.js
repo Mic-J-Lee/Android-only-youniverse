@@ -47,10 +47,11 @@ export default class Stripe extends Component {
   }
 
   render() {
-    const portrait = this.props.orientation == 'portrait'
+    const p = this.props
+    const portrait = p.orientation == 'portrait'
     return (
       <View style={{flex: 1, flexDirection: portrait ? 'column' : 'row' }} {...this.panResponder.panHandlers}>
-        <View style={{flex: 1, backgroundColor: this.props.displayedColor}} />
+        <View style={{flex: 1, backgroundColor: p.displayedColor}} />
         <View style={{flex: 1}} />
         <View style={{flex: 1}} />
         <Animated.View style={{
@@ -62,9 +63,9 @@ export default class Stripe extends Component {
             {scaleX: portrait ? 1 : this.springValue},
             {scaleY: portrait ? this.springValue : 1}
           ] }}>
-             <View style={{flex: 4, backgroundColor: this.props.displayedColor}} />
-          {!this.props.isActive && <View style={{flex: 1}} />}
-          {!this.props.isEnabled && <View style={{flex: 1}} />}
+             <View style={{flex: 4, backgroundColor: p.displayedColor}} />
+          {!p.isActive && <View style={{flex: 1}} />}
+          {!p.isEnabled && <View style={{flex: 1}} />}
         </Animated.View>
       </View>
     )

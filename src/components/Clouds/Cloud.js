@@ -59,12 +59,12 @@ export default class Cloud extends Component {
 
 
   render() {
-
+    const p = this.props
     return (
       <Animated.Image {...this.panResponder.panHandlers}
-        source={Images[this.props.image]} 
+        source={Images[p.image]}
         style={{
-          height:this.props.size,
+          height:p.size,
           width:260,
           position:'absolute', 
           transform: this.animatedValue.getTranslateTransform()

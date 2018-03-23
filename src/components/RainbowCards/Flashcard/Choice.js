@@ -14,6 +14,7 @@ export default class Choice extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const p = this.props
     this.props.status == 'starting success animation' 
       && this.props.isCorrect 
         && setTimeout(()=>this._exitScreenInTriumph(), 750)
@@ -71,31 +72,32 @@ export default class Choice extends Component {
   }
 
   render() {
-    const content = this.props.content
+    const p = this.props
+    const content = p.content
     const audioButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
         <AudioButton 
-          sound={content} 
-          size='small' 
-          isCorrect={this.props.isCorrect} 
+          sound={content}
+          size='small'
+          isCorrect={p.isCorrect}
           _checkIfCorrect={this._checkIfCorrect}
-          disabled={this.props.wrongGuesses.includes(content)} />
+          disabled={p.wrongGuesses.includes(content)} />
       </Animated.View>
     )
     const pictureButton = (
       <Animated.View style={{transform: this.animatedValue.getTranslateTransform()}} >
         <PictureButton
-          status={this.props.status} 
+          status={p.status}
           picture={content}
-          size='small' 
-          isCorrect={this.props.isCorrect} 
+          size='small'
+          isCorrect={p.isCorrect}
           _checkIfCorrect={this._checkIfCorrect}
-          disabled={this.props.wrongGuesses.includes(content)} />
+          disabled={p.wrongGuesses.includes(content)} />
       </Animated.View>
     )
 
     return (
-      this.props.medium == 'audio' ? audioButton : pictureButton
+      p.medium == 'audio' ? audioButton : pictureButton
     )
   }
 }

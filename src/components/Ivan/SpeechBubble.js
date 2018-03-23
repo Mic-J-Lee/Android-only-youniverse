@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 export default class SpeechBubble extends Component {
 
   render() {
-
+    const p = this.props
     return (
       <View>
         <Text style={{
@@ -15,9 +15,9 @@ export default class SpeechBubble extends Component {
           borderWidth: 1,
           borderRadius: 15,
           padding: 5,
-          maxWidth: this.props.width/2 - 10,
+          maxWidth: p.width/2 - 10,
           fontSize: 20
-          }} >{this.props.ivanSays}</Text>
+          }} >{p.ivanSays}</Text>
       </View>
     )
   }

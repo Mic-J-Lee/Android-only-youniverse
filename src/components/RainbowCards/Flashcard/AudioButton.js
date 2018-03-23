@@ -65,21 +65,22 @@ export default class AudioButton extends Component {
   }
 
   render() {
-    const spin = this.props.disabled ? '0deg' : this.spinValue.interpolate({
+    const p = this.props
+    const spin = p.disabled ? '0deg' : this.spinValue.interpolate({
         inputRange: [0, 1],
         outputRange: ['360deg', '0deg']
       })
     return (
       <TouchableOpacity 
-        disabled={this.props.disabled}
+        disabled={p.disabled}
         onPress={this._playSound}
-        onLongPress={this.props.size == 'small' ? this.props._checkIfCorrect : this._showPronunciation}
-        style={[styles[this.props.size + 'Circle'], {justifyContent: 'center', alignItems: 'center'} ]} >
+        onLongPress={p.size == 'small' ? p._checkIfCorrect : this._showPronunciation}
+        style={[styles[p.size + 'Circle'], {justifyContent: 'center', alignItems: 'center'} ]} >
         <Animated.Image 
-          style={[styles[this.props.size + 'Circle'], {transform: [{rotate: spin}], opacity: this.props.disabled ? .5 : 1} ]}
+          style={[styles[p.size + 'Circle'], {transform: [{rotate: spin}], opacity: p.disabled ? .5 : 1} ]}
           resizeMode='contain'
           source={require('../../../assets/pictures/800px-circle-Flag_of_Hong_Kong.png')} />
-        {this.props.disabled && <Image source={require('../../../assets/pictures/red_x.png')} style={styles.redX} />} 
+        {p.disabled && <Image source={require('../../../assets/pictures/red_x.png')} style={styles.redX} />}
       </TouchableOpacity>
     )
   }

@@ -5,7 +5,8 @@ import Stripe from './Stripe'
 export default class Rainbow extends Component {
   
   render() {
-    const portrait = this.props.orientation == 'portrait'
+    const p = this.props
+    const portrait = p.orientation == 'portrait'
     let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
     let fadedColors = ['#ff9999', '#ffdb99', '#ffff99', '#99ffa2', '#adadff', '#ffa3ff']
     if (!portrait) {
@@ -16,16 +17,16 @@ export default class Rainbow extends Component {
     for (let i = 0; i < colors.length; i++) {
       let color = colors[i]
       let fadedColor = fadedColors[i]
-      let isEnabled = this.props.rainbow[color]
+      let isEnabled = p.rainbow[color]
       allStripes.push(
         <Stripe key={color} 
                 color={color}
                 displayedColor={isEnabled == true ? color : fadedColor} 
-                isActive={this.props.activeColor == color}
+                isActive={p.activeColor == color}
                 isEnabled={isEnabled}
-                _toggleStripe={this.props._toggleStripe}
-                _activateStripe={this.props._activateStripe}
-                orientation={this.props.orientation} />
+                _toggleStripe={p._toggleStripe}
+                _activateStripe={p._activateStripe}
+                orientation={p.orientation} />
       )
     }
 

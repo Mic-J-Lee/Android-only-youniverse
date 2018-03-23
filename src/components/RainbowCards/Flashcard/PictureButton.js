@@ -6,14 +6,15 @@ import { styles } from './styleModule'
 export default class PictureButton extends Component {
 
   render() {
-    const disabled = this.props.disabled
+    const p = this.props
+    const disabled = p.disabled
     return (
-      <TouchableOpacity style={styles[this.props.size + 'RoundedSquare']}
-                        onPress={this.props._checkIfCorrect}
-                        disabled={disabled || this.props.status != 'ready' || this.props.size == 'large'} >
+      <TouchableOpacity style={styles[p.size + 'RoundedSquare']}
+                        onPress={p._checkIfCorrect}
+                        disabled={disabled || p.status != 'ready' || p.size == 'large'} >
         <View style={{justifyContent: 'center', alignItems: 'center'}} >
-          <Image source={Images[this.props.picture]}
-                 style={[styles[this.props.size + 'RoundedSquare'], {opacity: disabled ? .5 : 1}]} />
+          <Image source={Images[p.picture]}
+                 style={[styles[p.size + 'RoundedSquare'], {opacity: disabled ? .5 : 1}]} />
           {disabled && <Image source={require('../../../assets/pictures/red_x.png')} style={styles.redX} />}
         </View>
       </TouchableOpacity>

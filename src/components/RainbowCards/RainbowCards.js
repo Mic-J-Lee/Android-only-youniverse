@@ -6,7 +6,7 @@ import Flashcard from './Flashcard/Flashcard'
 export default class RainbowCards extends Component {
   
   render() {
-    let p = this.props
+    const p = this.props
     const rainbow = (<Rainbow
       activeColor={p.activeColor}
       rainbow={p.rainbow}
