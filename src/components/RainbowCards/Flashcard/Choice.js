@@ -14,7 +14,6 @@ export default class Choice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const p = this.props
     this.props.status == 'starting success animation' 
       && this.props.isCorrect 
         && setTimeout(()=>this._exitScreenInTriumph(), 750)
